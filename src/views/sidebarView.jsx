@@ -1,24 +1,34 @@
+export function SidebarView(props) {
+    const { user, onSignOut } = props;
 
-
-export function SidebarView(props){
     return (
         <div>
-            <button onClick={handleUserLoginClickACB}>Login</button>
-            <button onClick={handleUserMainClickACB}>Main Menu</button>
+            {user ? (
+                <>
+                    <p>Welcome, {user.email}</p>
+                    <button onClick={onSignOut}>Sign Out</button>
+                    <button onClick={handleUserMainClickACB}>Main Menu</button>
+                </>
+            ) : (
+                <>
+                    <button onClick={handleUserLoginClickACB}>Login</button>
+                    <button onClick={handleUserRegisterClickACB}>Create Account</button>
+                    <button onClick={handleUserMainClickACB}>Main Menu</button>
 
-
-
+                </>
+            )}
         </div>
     );
 
-    function handleUserLoginClickACB(evt) {
+    function handleUserRegisterClickACB(evt) {
+        window.location.hash = "#/register";
+    }
 
-        window.location.hash="#/login"  // TW3.3.2.5
+    function handleUserLoginClickACB(evt) {
+        window.location.hash = "#/login";
     }
 
     function handleUserMainClickACB(evt) {
-
-        window.location.hash="#/game"  // TW3.3.2.5
+        window.location.hash = "#/game";
     }
-
 }

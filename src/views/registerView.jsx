@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-export function LoginView({ signIn }) {
+export function RegisterView({ register }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -9,22 +9,22 @@ export function LoginView({ signIn }) {
 
     async function handleSubmitACB(e) {
         e.preventDefault();
+        setLoading(true);
         setErrorMessage('');
         setSuccessMessage('');
-        setLoading(true);
 
         try {
-            await signIn(email, password);
-            setSuccessMessage('Sign in successful!');
+            await register(email, password);
+            setSuccessMessage('Registration successful!');
         } catch (error) {
-            setErrorMessage(`Sign in failed: ${error.message}`);
+            setErrorMessage(`Registration failed: ${error.message}`);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmitACB} className="login-form">
+        <form onSubmit={handleSubmitACB} className="register-form">
             <div>
                 <label htmlFor="email">Email:</label>
                 <input
@@ -50,7 +50,7 @@ export function LoginView({ signIn }) {
             {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
 
             <button type="submit" disabled={loading}>
-                {loading ? 'Signing in...' : 'Sign In'}
+                {loading ? 'Registering...' : 'Register'}
             </button>
         </form>
     );
