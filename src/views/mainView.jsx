@@ -1,7 +1,7 @@
 
 import "/src/style.css"
 
-export function GameView(props){
+export function MainView(props){
 
 
     return (
@@ -37,9 +37,7 @@ export function GameView(props){
                 />
                 <button>Submit</button>
             </div>
-            <div>
-                <h3>Attempts:</h3>
-            </div>
+
         </div>
     );
 };

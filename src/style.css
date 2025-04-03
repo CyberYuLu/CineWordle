@@ -9,3 +9,58 @@
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+
+  
+.guesses-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-collapse: separate;
+    border-spacing: 5px; /* Adds space between rows and columns */
+  }
+  
+  .guess-header, .guess-row {
+    text-align: center;
+  }
+  
+
+  .guess-cell_image {
+
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid black;
+    width: 50; /* Adjust cell width */
+  }
+  .guess-cell {
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid black;
+    width: 150px; /* Adjust cell width */
+  }
+  
+  .image-cell {
+    background-color: white;
+  }
+  
+  .guess-image {
+    width: 75;
+    height: 110;
+  }
+  
+  .correct {
+    background-color: green;
+    color: white;
+  }
+  
+  .incorrect {
+    background-color: red;
+    color: white;
+  }
+
+  .partial {
+    background-color: yellow;
+    color: black;
+  }

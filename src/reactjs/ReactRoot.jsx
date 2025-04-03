@@ -1,9 +1,10 @@
 import { observer } from "mobx-react-lite";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import { Game } from "./gamePresenter.jsx";
+import { Main } from "./mainMenuPresenter.jsx";
 import { Sidebar } from "./sidebarPresenter.jsx";
 import { createLoginPresenter } from "./loginPresenter.jsx";
 import { createRegisterPresenter } from "./registerPresenter.jsx";
+
 
 function LoginWrapper({ model }) {
     const Login = createLoginPresenter(model);
@@ -17,8 +18,8 @@ function RegisterWrapper({ model }) {
 
 function makeRouter(model) {
     return createHashRouter([
-        { path: "/", element: <Game model={model} /> },  // default route goes to search
-        { path: "/game", element: <Game model={model} /> },
+        { path: "/", element: <Main model={model} /> },  // default route goes to search
+        { path: "/game", element: <Main model={model} /> },
         { path: "/login", element: <LoginWrapper model={model}/>},
         { path: "/register", element: <RegisterWrapper model={model}/> },
     ]);

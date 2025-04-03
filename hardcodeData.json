@@ -1,0 +1,48 @@
+{
+    "targetMovie": {
+      "name": "The Count of Monte Cristo",
+      "year": 2007,
+      "genre": ["Thriller"],
+      "prop1" : "Stockholm",
+      "prop2" : "Garonne",
+      "img" : "img/poster1.jpg"
+    },
+    "guesses": [
+      {
+        "name": "Kung Fu Panda",
+        "year": 2008,
+        "genre": ["Thriller", "Drama"],
+        "prop1" : "Paris",
+        "prop2" : "Lancang",
+      "img" : "/img/Oppenheimer_(film).jpg"
+
+      },
+      {
+        "name": "Minions",
+        "year": 2007,
+        "genre": ["Horror"],
+        "prop1" : "Beijing",
+        "prop2" : "Söderström",
+      "img" : "/img/Oppenheimer_(film).jpg"
+      },
+    {
+        "name": "The Dark Knight",
+        "year": 2008,
+        "genre": ["Action", "Thriller"],
+        "prop1" : "Beijing",
+        "prop2" : "Garonne",
+      "img" : "/img/Oppenheimer_(film).jpg"
+    },
+    {
+        "name": "The Count of Monte Cristo",
+        "year": 2007,
+        "genre": ["Thriller"],
+        "prop1" : "Stockholm",
+        "prop2" : "Garonne",
+      "img" : "img/poster1.jpg"
+    }
+
+
+    ]
+  }
+  
