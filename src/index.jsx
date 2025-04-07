@@ -16,3 +16,4 @@ import { ReactRoot } from "/src/reactjs/ReactRoot.jsx";
 const rootJSX = <ReactRoot model={reactiveModel} />
 createRoot(document.getElementById('root')).render(rootJSX);
 
+window.myModel= reactiveModel;
