@@ -10,12 +10,13 @@ export const model = {
      * attributes we are looking for to avoid having to make multiple API calls for the attributes. Get the attributes with an API call.
      */
     correctMovie: null,
+
     /**
-     * The users are in a list. Contains object with attributes such as an unique id and an username
-     * It should also contain a list with unique ID:d which represent the guesses.
-     * Should maybe have timestamps connected to guesses or something.
+     * Store the currently authenticated user. All the information 
      */
-    users: [],
+    currentUser : null, 
+    leaderBoard :  [],  // The values can be collected from firebase intially and when something changes.
+    guesses: [], // Can keep the guesses locally and when the user logs out can they be pushed to the firebase and this can be reset. 
 
     // Parameters for filtering which movies we can select from. Minbudget is obvious.
     popular: true,
@@ -26,7 +27,11 @@ export const model = {
     currentGuessID: null, 
     // Slightly different from the labs as we only have a string.
     searchStr :  null, 
-    searchResultsPromiseState: {},
+    searchResultsPromiseState: {
+      data: { results: [] },
+      error: null,
+      promise: null,
+    },
     currentMoviePromiseState: {},
     leaderBoard: [],      // Add this here, but not sure if necessary.
 
@@ -37,15 +42,9 @@ export const model = {
     }, 
 
     // Add a new user based on firebase data.
-    addUser(user){
-        this.users = [...this.users,user];
+    setCurrentUser(user) {
+      this.currentUser = user;
     },
-
-    // Remove user based on uid.
-    removeUser(userToRemove) {
-        this.users = this.users.filter(user => user.uid !== userToRemove.uid);
-      }, 
-    
 
     // Set the current guess. It is for the global state so might not be necessary.s
     setCurrentGuess(movieID){
@@ -53,14 +52,15 @@ export const model = {
     }, 
 
     // This function for recording guesses for an user. 
-    addGuessForUser(uid, movie) {
-        const user = this.users.find(u => u.uid === uid);
-        if (user) {
-          user.guesses = [...(user.guesses || []), movie];
-        }
-      },
+    addGuessForUser(guess) {
+           // Each guess could be an object containing the guess details.
+        this.guesses.push(guess);
+    },
 
-
+    // Method to reset the guesses when necessary.
+    resetGuesses() {
+      this.guesses = [];
+    },
 
     /**
      * Function for setting the correct movie.
@@ -88,6 +88,8 @@ export const model = {
     },
 
 
+
+
     // Not sure about if it should be the same as in the labs, but here do we set the search parameter.
     setSearchQuery(query) {
         this.searchStr = query;
@@ -110,7 +112,7 @@ export const model = {
 
     /**
      * I guess we can assume the leaderboard is part of the model. Add some methods here then.
-     * 
+     * The leaderboard can be populated by pulling from the firestore.
      */
 
     // model for keeping the leaderboard sorted.
@@ -119,32 +121,3 @@ export const model = {
 };
 
 
-/**
- * Inpiration for how we could get the attributes which are relevant from firebase 
- * 
- */
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-
-
-const auth = getAuth();
-// Ahh, we set an observer on the auth object. This listener should probably be in the root.
-onAuthStateChanged(auth, (user) => {
-    if(user){
-        // uses the user.uid attribute as an unique attribute. 
-        // will add other attributes as needed. Can probably add an attribute 
-        // such as username which we would use in the leaderboard.
-
-        // if the user does not already exist in the model. Will need to rename these. 
-        if(!model.users.some(u => u.uid === user.uid)){
-            model.addUser({
-                uid: user.uid, 
-                name: user.displayName ||user.email, 
-                email: user.email, 
-                score: 0,   // To be used in the leaderboard.
-                guesses: []  // Debatable if it should be an attritbute.
-            });
-        }
-    } else {
-        // Hanlde user sign-out.
-    }
-});
