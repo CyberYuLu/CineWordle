@@ -1,5 +1,7 @@
 
 import "/src/style.css"
+import { SearchBar } from "../reactjs/searchbarPresenter";
+
 
 export function MainView(props){
 
@@ -31,11 +33,8 @@ export function MainView(props){
                 </button>
             </div>
             <div>
-                <input
-                    type="text"
-                    placeholder="Enter movie name"
-                />
-                <button>Submit</button>
+            <SearchBar model={props.model} />
+
             </div>
 
         </div>

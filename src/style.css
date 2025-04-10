@@ -10,7 +10,15 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-
+.options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+}
   
 .guesses-container {
     display: flex;

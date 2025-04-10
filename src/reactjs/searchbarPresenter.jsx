@@ -1,64 +1,69 @@
-
-
+// SearchBar.jsx
 import { observer } from "mobx-react-lite";
-import { SearchBarView } from "./SearchBarView";
+import { SearchBarView } from "../views/searchbarView";
 
-/**
- *  A dedicted searchbar and view is needed because it has a considerable amount of logic.
- *  Also need some suggesion 
- */
+function debounce(callback, delay) {
+  let timerId;
+  function debounced(...args) {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  }
+  return debounced;
+}
 
-const  SearchBar = observer(function searchRender(props){
-
-
-
+const SearchBar = observer(function SearchBar(props) {
+  // When this function is called, it will execute the search.
+  function performSearch(query) {
     
-    function debounce(){
-        
+    props.model.doSearch(query );
+   
+  }
+  
+  // Create a debounced version of performSearch
+  const debouncedSearch = debounce(performSearch, 200);
+  
+  // Callback for when the query changes.
+  function handleQueryChange(event) {
+    const newQuery = event.target.value;
+    console.log(newQuery)
+    props.model.setSearchQuery(newQuery);
+    if (newQuery.length >= 2) {
+      debouncedSearch(newQuery);
+
     }
-
-    function debouncedSearch(newQuery){
-        debounce(newQuery)
+  }
+  
+  // When a movie suggestion is selected, update the search input and set current guess.
+  function handleSuggestionSelect(movie) {
+    // Update the search bar with the movie title.
+    props.model.setSearchQuery(movie.title);
+    // Save the current guess (for example, storing the movie id).
+    props.model.setCurrentGuess(movie.id);
+  }
+  
+  // When the submit button is clicked, use the selected movie id.
+  function clickButtonACB() {
+    if (props.model.currentGuess) {
+      console.log("Submitting movie id:", props.model.currentGuess);
+    } else {
+      console.log("No movie has been set.");
     }
-    
-    //When the user clicks submit on a guess is the current guess set and 
-    // other backend logic will initiate.
-    function clickButtonACB(){
-        if(props.model.currentGuess){
-            console.log("Submitting movie id:", props.model.currentGuess);
-        }else{
-            console.log("No movie has been set. ")
-        }
-    }
-
-    // Callback for handling when the query changes.
-    // Need to be careful to avoid problems with race conditions.
-    function handleQueryChange(event){
-        const newQuery = event.target.value
-        props.model.setSearchQuery(newQuery)
-        if(newQuery>= 2){
-            debouncedSearch(newQuery)
-        }
-    };
-
-    // When a movie in the drop down list is selected do we change the selected movie and also populate the search bar. 
-    // The suggestions will be full movies.
-    function handleSuggestionSelect(movie){
-        props.setSearchQuery(movie.title) // will be the title, this will hopefully populate the 
-        props.model.setCurrentGuess(movie.id) // will be the ID.
-    }
-
-    return (
-            <SearchBarView
-              query={props.model.query}
-              suggestions={suggestions}
-              onQueryChange={handleQueryChange}
-              onSuggestionSelect={handleSuggestionSelect}
-              onSubmitButtonClick = {clickButtonACB}
-            />
-    )
-
+  }
+  
+  let suggestions = props.model.searchResultsPromiseState.data?.results || [];
+  let query = props.model.searchStr|| "";
+  
+  return (
+    <SearchBarView
+      query={query}
+      suggestions={suggestions}
+      onQueryChange={handleQueryChange}
+      onSuggestionSelect={handleSuggestionSelect}
+      onSubmitButtonClick={clickButtonACB}
+    />
+  );
 });
 
-
-export {SearchBar}
+export { SearchBar };

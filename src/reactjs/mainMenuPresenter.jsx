@@ -34,3 +34,4 @@ const Main = observer(
 );
 
 export { Main };
+
