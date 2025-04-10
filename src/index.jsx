@@ -10,14 +10,15 @@ import { configure } from "mobx";
 configure({ enforceActions: "never" });
 
 
-import {model} from "/src/Model.js"
-const reactiveModel= observable(model);
+import {userModel, appModel} from "/src/Model.js"
+const reactiveUserModel= observable(userModel);
+const reactiveAppModel = observable(appModel);
 
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // The user is logged in; update your model with this user's details.
-    model.currentUser = {
+    userModel.currentUser = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName
@@ -25,7 +26,7 @@ onAuthStateChanged(auth, (user) => {
     };
   } else {
     // No user is signed in; clear the current user from your model.
-    model.currentUser = null;
+    userModel.currentUser = null;
   }
 });
 
@@ -33,4 +34,5 @@ import { ReactRoot } from "/src/reactjs/ReactRoot.jsx";
 const rootJSX = <ReactRoot model={reactiveModel} />
 createRoot(document.getElementById('root')).render(rootJSX);
 
-window.myModel= reactiveModel;
+window.appModel= reactiveAppModel;
+window.userModel= reactiveUserModel;

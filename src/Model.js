@@ -1,123 +1,82 @@
-
-// Model for representing the app.
-// Should probably have on model for everything. T
 import { resolvePromise } from "./resolvePromise";
 import {getExpectedMovieID, getMovieDetails, searchMovies} from "./fetchData"
 
-export const model = {
-    /**
-     * The movie we are looking for. Should be an object with a ID and the 
-     * attributes we are looking for to avoid having to make multiple API calls for the attributes. Get the attributes with an API call.
-     */
-    correctMovie: null,
+// Model for storing user-specific data; data that is unique for each logged-in user.
+export const userModel = {
+	currentUser: null,
+	guesses: [],
+	currentGuessID: null,
 
-    /**
-     * Store the currently authenticated user. All the information 
-     */
-    currentUser : null, 
-    leaderBoard :  [],  // The values can be collected from firebase intially and when something changes.
-    guesses: [], // Can keep the guesses locally and when the user logs out can they be pushed to the firebase and this can be reset. 
+	setCurrentUser(user) {
+		this.currentUser = user;
+	},
 
-    // Parameters for filtering which movies we can select from. Minbudget is obvious.
-    popular: true,
-    minBudget: 100000, 
+	resetCurrentUser() {
+		this.currentUser = null;
+	},
 
-    
-    // currentGuess is the id.
-    currentGuessID: null, 
-    // Slightly different from the labs as we only have a string.
-    searchStr :  null, 
-    searchResultsPromiseState: {
-      data: { results: [] },
-      error: null,
-      promise: null,
-    },
-    currentMoviePromiseState: {},
-    leaderBoard: [],      // Add this here, but not sure if necessary.
+	addGuess(guess) {
+		this.guesses.push(guess);
+	},
 
-    // sets the expected movie
-    setExpectedMovie(movie){
-        this.expectedMovie = movie;
+	resetGuesses() {
+		this.guesses = [];
+	},
 
-    }, 
-
-    // Add a new user based on firebase data.
-    setCurrentUser(user) {
-      this.currentUser = user;
-    },
-
-    // Set the current guess. It is for the global state so might not be necessary.s
-    setCurrentGuess(movieID){
-        this.currentGuess = movieID
-    }, 
-
-    // This function for recording guesses for an user. 
-    addGuessForUser(guess) {
-           // Each guess could be an object containing the guess details.
-        this.guesses.push(guess);
-    },
-
-    // Method to reset the guesses when necessary.
-    resetGuesses() {
-      this.guesses = [];
-    },
-
-    /**
-     * Function for setting the correct movie.
-     * Need to adjust the API to return the ID.
-     */
-    setCorrectMovie(){
-      this.correctMovie = getExpectedMovieID(this.minBudget, this.popular)
-    }, 
-     
-    /**
-     *  This is for evaluting the guess against the expected movie. 
-     *  Can maybe make it into a help function later.
-     *  Need to 
-     */
-    evaluateGuess(guess) {
-        if (!this.expectedMovie) {
-          throw new Error('Expected movie is not set');
-        }
-        // 
-        return {
-            titleMatch: guess.title.toLowerCase() === this.expectedMovie.title.toLowerCase(),
-            directorMatch: guess.director.toLowerCase() === this.expectedMovie.director.toLowerCase(),
-            releaseYearMatch: guess.releaseYear === this.expectedMovie.releaseYear,
-          };
-    },
+	setCurrentGuess(movieID) {
+		this.currentGuessID = movieID;
+	},
 
 
-
-
-    // Not sure about if it should be the same as in the labs, but here do we set the search parameter.
-    setSearchQuery(query) {
-        this.searchStr = query;
-      },
-
-    // Trigger a movie search.
-    doSearch(obj){
-        resolvePromise(searchMovies(obj), this.searchResultsPromiseState)
-    }, 
-
-
-    // Fetch the details for the current guess. This should be here and uses an API-call.
-    //
-    currentMovieEffect() {
-        if (this.currentGuessID) {
-          resolvePromise(getMovieDetails(this.currentGuessID), this.currentMoviePromiseState);
-        }
-      },
-
-
-    /**
-     * I guess we can assume the leaderboard is part of the model. Add some methods here then.
-     * The leaderboard can be populated by pulling from the firestore.
-     */
-
-    // model for keeping the leaderboard sorted.
-
-    // need to add a function for calculting the value we base the leaderboard on.
 };
+
+// "Global" data is stored here.
+export const appModel = {
+
+	correctMovie: null,
+	leaderBoard: [],
+	popular: true,
+	minBudget: 100000,
+	searchStr: null,
+	searchResultsPromiseState: {
+		data: { results: [] },
+		error: null,
+		promise: null,
+	},
+	currentMoviePromiseState: {},
+
+	setCorrectMovie(movie ) {
+		this.correctMovie = movie;
+	},
+
+	evaluateGuess(guess) {
+		if (!this.correctMovie) {
+			throw new Error("Correct movie is not set!");
+		}
+		return {
+			titleMatch: guess.title.toLowerCase() === this.correctMovie.title.toLowerCase(),
+			directorMatch: guess.director.toLowerCase() === this.correctMovie.director.toLowerCase(),
+			releaseYearMatch: guess.releaseYear === this.correctMovie.releaseYear,
+			genreMatch: guess.genres.some(g => correctMovie.genres.includes(g)), // added genre and country
+			countryMatch: guess.country.toLowerCase() === this.correctMovie.country.toLowerCase(),
+		}
+	},
+
+	setSearchQuery(query) {
+		this.searchStr = query;
+	},
+
+	doSearch(obj) {
+		resolvePromise(searchMovies(obj), this.searchResultsPromiseState);
+	},
+
+	currentMovieEffect(currentGuessID) {
+		if (currentGuessID) {
+			resolvePromise(getMovieDetails(currentGuessID), this.currentMoviePromiseState);
+		}
+	}
+}
+
+
 
 
