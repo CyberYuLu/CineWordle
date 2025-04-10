@@ -8,6 +8,10 @@ import { observable } from "mobx";
 import {model} from "/src/Model.js"
 const reactiveModel= observable(model);
 
+import hardcodeData from "/hardcodeData.json";
+reactiveModel.correctMovie = hardcodeData.targetMovie;
+reactiveModel.guesses = hardcodeData.guesses;
+
 onAuthStateChanged(auth, (user) => {
     reactiveModel.user = user;
 });
@@ -17,3 +21,6 @@ const rootJSX = <ReactRoot model={reactiveModel} />
 createRoot(document.getElementById('root')).render(rootJSX);
 
 window.myModel= reactiveModel;
+
+
+

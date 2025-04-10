@@ -24,9 +24,9 @@ const Main = observer(
 
         return (
             <div>
-                <MainView />
-                <MainGame />
-                {win && <WinningView onButtonClick={disableWinningScreanACB} />}
+                <MainView model={props.model}/>
+                <MainGame model={props.model}/>
+                {win && <WinningView onButtonClick={disableWinningScreanACB} model={props.model}/>}
                 <button onClick={toggleWinACB}>Toggle Win</button>
             </div>
         );

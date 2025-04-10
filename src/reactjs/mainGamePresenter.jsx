@@ -17,7 +17,7 @@ const MainGame = observer(
             setText(inputTyped);
         }
 
-        function performSearchACB() {
+        /*function performSearchACB() {
             if (!text.trim()) return;
 
             const newGuess = {
@@ -35,6 +35,29 @@ const MainGame = observer(
                 ...prevData,
                 guesses: [...prevData.guesses, newGuess]
             }));
+        }*/
+
+        function performSearchACB() {
+            if (!text.trim()) return;
+    
+            props.model.doSearch({ query: text });
+    
+            const newGuess = {
+                title: text,
+                director: "Unknown", 
+                releaseYear: 2000,   
+            };
+            console.log("Adding guess:", props.model.searchResultsPromiseState);
+            props.model.addGuessForUser(newGuess);
+    
+    
+            const evaluation = props.model.evaluateGuess(newGuess);
+            console.log("Evaluation:", evaluation);
+    
+            // Check if the user won
+            if (evaluation.titleMatch && evaluation.directorMatch && evaluation.releaseYearMatch) {
+                alert("You won!");
+            }
         }
 
         return (
@@ -46,8 +69,8 @@ const MainGame = observer(
                 />
 
                 <MainGameView 
-                    targetMovie={gameData.targetMovie} 
-                    guesses={gameData.guesses} 
+                    targetMovie={props.model.correctMovie} 
+                    guesses={props.model.guesses} 
                 />
             </div>
         );
