@@ -2,12 +2,6 @@
 import { observer } from "mobx-react-lite";
 import { SearchBarView } from "../views/searchbarView";
 
-/**
- * A named debounce function that returns a debounced version of a callback.
- * @param {Function} callback - The function to debounce.
- * @param {number} delay - The delay in milliseconds.
- * @returns {Function} - A debounced version of the callback.
- */
 function debounce(callback, delay) {
   let timerId;
   function debounced(...args) {
@@ -22,7 +16,6 @@ function debounce(callback, delay) {
 const SearchBar = observer(function SearchBar(props) {
   // When this function is called, it will execute the search.
   function performSearch(query) {
-    // Assumes that doSearch is implemented in your model.
     
     props.model.doSearch(query );
    
@@ -54,7 +47,6 @@ const SearchBar = observer(function SearchBar(props) {
   function clickButtonACB() {
     if (props.model.currentGuess) {
       console.log("Submitting movie id:", props.model.currentGuess);
-      // You might want to call additional logic here (e.g., submit the guess)
     } else {
       console.log("No movie has been set.");
     }
