@@ -91,10 +91,13 @@ export function searchMovies(query){
     };
   
     const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`;
-    fetch(url, options)
+  // **Return** the fetch promise.
+  return fetch(url, options)
     .then(res => res.json())
-    .then(res => console.log(res))    
-    .catch(err => console.error(err));
+    .catch(err => {
+      console.error(err);
+      throw err;
+    });
 }
 
 

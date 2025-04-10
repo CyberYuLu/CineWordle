@@ -1,35 +1,36 @@
+// SearchBarView.jsx
+import React from "react";
 
-
-/**
- *  A searchbar view which 
- *  
- */
-
-
-export function SearchBarView({ props }) {
-
-    function handleSubmitABC(){
-        props.onSubmitButtonClick()
-    }
-
-    return(
-        <div>
-        <input type="text" placeholder="enter movie guess" value={props.query} onChange={onQueryChange}/>
-        
-        {props.query.length > 2 && props.suggestions.length > 0 && (
-            <div class="options">
-                {props.suggestions.map((movie) =>(
-                    <div
-                    key={movie.id}
-                    onClick={() => onSuggestionSelect(movie)}
-                    >
-                        {movie.title}
-                    </div>
-
-                ))}
+export function SearchBarView({ query, suggestions, onQueryChange, onSuggestionSelect, onSubmitButtonClick }) {
+  
+  // Local named callback for the submit button.
+  function handleSubmitABC() {
+    onSubmitButtonClick();
+  }
+  
+  return (
+    <div style={{ position: "relative" }}>
+      <input
+        type="text"
+        placeholder="Enter movie guess"
+        value={query}
+        onChange={onQueryChange}
+      />
+      
+      {query.length > 2 && suggestions.length > 0 && (
+        <div className="options" >
+          {suggestions.map((movie) => (
+            <div
+              key={movie.id}
+              onClick={() => onSuggestionSelect(movie)}
+              style={{ padding: "8px", cursor: "pointer" }}
+            >
+              {movie.title}
             </div>
-        )}
-        <button onClick={handleSubmitABC}>Submit</button>
+          ))}
         </div>
-    );
+      )}
+      <button onClick={handleSubmitABC}>Submit</button>
+    </div>
+  );
 }
