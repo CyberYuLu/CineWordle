@@ -115,7 +115,6 @@ export const model = {
      * The leaderboard can be populated by pulling from the firestore.
      */
 
-    // model for keeping the leaderboard sorted.
 
     // need to add a function for calculting the value we base the leaderboard on.
 };
