@@ -28,6 +28,8 @@
     border-collapse: separate;
     border-spacing: 5px; /* Adds space between rows and columns */
   }
+
+
   
   .guess-header, .guess-row {
     text-align: center;
@@ -48,6 +50,18 @@
     border: 1px solid black;
     width: 150px; /* Adjust cell width */
   }
+
+  .year-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+
+  
+
+  
   
   .image-cell {
     background-color: white;

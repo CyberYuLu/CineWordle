@@ -17,47 +17,24 @@ const MainGame = observer(
             setText(inputTyped);
         }
 
-        /*function performSearchACB() {
-            if (!text.trim()) return;
-
-            const newGuess = {
-                name: text,
-                year: 2000,                      
-                genre: ["Unknown"],              
-                prop1: "Unknown",                
-                prop2: "Unknown",                
-                img: "/img/Oppenheimer_(film).jpg" 
-            };
-
-            console.log("Adding guess:", newGuess);
-
-            setGameData(prevData => ({
-                ...prevData,
-                guesses: [...prevData.guesses, newGuess]
-            }));
-        }*/
 
         function performSearchACB() {
             if (!text.trim()) return;
     
-            props.model.doSearch({ query: text });
     
             const newGuess = {
-                title: text,
-                director: "Unknown", 
-                releaseYear: 2000,   
+                name: text,
+                year: 2000, 
+                genre: ["Thriller"],   
+                prop1 : "Stockholm",
+                prop2 : "Garonne",
+                img : "img/poster1.jpg"
             };
             console.log("Adding guess:", props.model.searchResultsPromiseState);
             props.model.addGuessForUser(newGuess);
+            console.log("Updated guesses:", props.model.guesses);
+
     
-    
-            const evaluation = props.model.evaluateGuess(newGuess);
-            console.log("Evaluation:", evaluation);
-    
-            // Check if the user won
-            if (evaluation.titleMatch && evaluation.directorMatch && evaluation.releaseYearMatch) {
-                alert("You won!");
-            }
         }
 
         return (
@@ -71,6 +48,8 @@ const MainGame = observer(
                 <MainGameView 
                     targetMovie={props.model.correctMovie} 
                     guesses={props.model.guesses} 
+                    model ={props.model}
+                    
                 />
             </div>
         );

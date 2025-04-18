@@ -35,6 +35,8 @@ export const model = {
     currentMoviePromiseState: {},
     leaderBoard: [],      // Add this here, but not sure if necessary.
 
+
+
     // sets the expected movie
     setExpectedMovie(movie){
         this.expectedMovie = movie;
