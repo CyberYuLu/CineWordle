@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { MainGameView } from "/src/views/mainGameView.jsx";
 import { SearchMovieView } from "/src/views/searchMovieView.jsx";
+import { HintsPresenter } from "./hintsPresenter.jsx";
 
 import initialData from '/hardcodeData.json';
 
@@ -44,6 +45,8 @@ const MainGame = observer(
                     onSearchChange={updateSearchQueryACB} 
                     onSearchButtonClick={performSearchACB}  
                 />
+
+                <HintsPresenter model={props.model} />
 
                 <MainGameView 
                     targetMovie={props.model.correctMovie} 

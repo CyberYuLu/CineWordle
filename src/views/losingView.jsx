@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import "/src/style.css";
 
-export const WinningView = observer((props) => {
+export const LosingView = observer((props) => {
     const movie = {
         name: props.model.correctMovie.name,
         description: props.model.correctMovie.summary,
@@ -11,17 +11,18 @@ export const WinningView = observer((props) => {
 
     const numberOfGuesses = props.model.guesses.length;    
 
+
     return (
         <div className="winning-view">
-            <h1>Congratulations! 🎉</h1>
-            <p>The correct movie was guessed in {numberOfGuesses} guesses!</p>
+            <h1>Game Over 😞</h1>
+            <p>Sorry, you couldn't guess the correct movie.</p>
 
             <div className="movie-details">
-                <h2>{movie.name}</h2>
+                <h2>The correct answer was: {movie.name}</h2>
                 <p>{movie.description}</p>
                 <img src={movie.image} alt={movie.name} />
             </div>
-            <button onClick={props.onButtonClick}>Exit !</button>
+            <button onClick={props.onButtonClick}>Try Again</button>
         </div>
     );
 });

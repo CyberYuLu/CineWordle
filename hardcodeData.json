@@ -5,7 +5,9 @@
       "genre": ["Thriller"],
       "prop1" : "Stockholm",
       "prop2" : "Garonne",
-      "img" : "img/poster1.jpg"
+      "img" : "img/poster1.jpg",
+      "summary": "A thrilling tale of revenge and redemption.",
+      "mainCharacter": "Edmond Dantès"
     },
     "guesses": [
       {
