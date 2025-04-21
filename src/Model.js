@@ -35,6 +35,8 @@ export const model = {
     currentMoviePromiseState: {},
     leaderBoard: [],      // Add this here, but not sure if necessary.
 
+
+
     // sets the expected movie
     setExpectedMovie(movie){
         this.expectedMovie = movie;
@@ -115,7 +117,6 @@ export const model = {
      * The leaderboard can be populated by pulling from the firestore.
      */
 
-    // model for keeping the leaderboard sorted.
 
     // need to add a function for calculting the value we base the leaderboard on.
 };

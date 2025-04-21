@@ -3,9 +3,9 @@ import { auth} from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import {createRoot} from "react-dom/client";
 import { observable } from "mobx";
+import { fetchUserData, fetchChallengeData, recordGuess} from "./firebase";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
 
 // This was needed. We later needed to change the resolvepromise to integrate actions later perhaps.
 import { configure } from "mobx";
@@ -21,18 +21,16 @@ reactiveModel.guesses = hardcodeData.guesses;
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // The user is logged in; update your model with this user's details.
-    model.currentUser = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName
-      // 
-    };
+    // We set these values here since
+    reactiveModel.currentUser = {uid: user.uid,email: user.email,};
+    fetchUserData(user, reactiveModel)
   } else {
     // No user is signed in; clear the current user from your model.
-    model.currentUser = null;
+    reactiveModel.currentUser = null;
   }
 });
+
+
 
 import { ReactRoot } from "/src/reactjs/ReactRoot.jsx";
 const rootJSX = <ReactRoot model={reactiveModel} />
@@ -41,4 +39,5 @@ createRoot(document.getElementById('root')).render(rootJSX);
 window.myModel= reactiveModel;
 
 
-
+// Need to connect to the persistence. Can maybe do it during the authstateChange.
+// Most/all of the code for reacting to state changes is in the the 

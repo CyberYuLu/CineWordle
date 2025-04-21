@@ -28,6 +28,8 @@
     border-collapse: separate;
     border-spacing: 5px; /* Adds space between rows and columns */
   }
+
+
   
   .guess-header, .guess-row {
     text-align: center;
@@ -48,6 +50,18 @@
     border: 1px solid black;
     width: 150px; /* Adjust cell width */
   }
+
+  .year-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+
+  
+
+  
   
   .image-cell {
     background-color: white;
@@ -88,4 +102,33 @@
     color: white;
     z-index: 1000; /* to be over all views */
     text-align: center;
+}
+
+.hints-container {
+  margin-top: 20px;
+  padding: 10px;
+  border: 2px solid #4CAF50;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ================== HINT VIEW ==================== */
+/* No hint view */
+.no-hint-view {
+  text-align: center;
+  font-size: 16px;
+  color: #888;
+  font-style: italic;
+}
+
+/* Hint view */
+.hint-view {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #e8f5e9;
+  border-left: 5px solid #4CAF50;
+  font-size: 16px;
+  color: #333;
+  border-radius: 5px;
 }
