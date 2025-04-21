@@ -3,6 +3,8 @@ import { auth} from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import {createRoot} from "react-dom/client";
 import { observable } from "mobx";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
 // This was needed. We later needed to change the resolvepromise to integrate actions later perhaps.

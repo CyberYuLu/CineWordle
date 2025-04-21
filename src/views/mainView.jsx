@@ -1,9 +1,10 @@
 
 import "/src/style.css"
 import { SearchBar } from "../reactjs/searchbarPresenter";
+import TutorialView from "./tutorialView";
 
 
-export function MainView(props){
+export function MainView(props) {
 
 
     return (
@@ -15,7 +16,7 @@ export function MainView(props){
 
                     className="buttonStyle"
                     onClick={() => console.log("Current Streak clicked")}
-                    
+
                 >
                     Current Streak
                 </button>
@@ -26,17 +27,19 @@ export function MainView(props){
                     User Data
                 </button>
                 <button
-                    onClick={() => console.log("How to play clicked")}
-                    className="buttonStyle"
+                    type="button"
+                    className="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#howToPlayModal"
                 >
                     How to play
                 </button>
             </div>
             <div>
-            <SearchBar model={props.model} />
+                <SearchBar model={props.model} />
 
             </div>
-
+            <TutorialView />
         </div>
     );
 };
