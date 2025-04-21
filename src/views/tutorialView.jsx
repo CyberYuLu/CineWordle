@@ -91,4 +91,4 @@ export default function TutorialView() {
         <p style={{ marginTop: "30px" }}>Good luck and have fun!</p>
       </div>
     );
-  }*/
+  }//*/
