@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics, setCurrentScreen } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { getExpectedMovieID } from "./fetchData";
 
 const firebaseConfig = {
 
@@ -39,6 +40,7 @@ const USERCOLLECTION = "users"
 const CHALLENGECOLLECTSION = "challenge" 
 
 
+
 export function fetchUserData(user, reactiveModel){
     // The documents holding the users. 
     const userDocRef = doc(db, USERCOLLECTION, user.uid); 
@@ -47,7 +49,8 @@ export function fetchUserData(user, reactiveModel){
         // If the user does not exist.
         if(!userSnapShot.exists()){
             let dataForCloud= {
-                userID: user.uid,
+                // uid is the name of the field we get from firebase
+                uid: user.uid,
                 email: user.email,
                 currentChallenge: {challengeID: null, guesses: []},   // contans the challengeID (the current data)and guesses
                 statistics: {}, 
@@ -88,8 +91,6 @@ export function recordGuess(userID, guess){
     
 }
 
-
-
 /**
  * A function for setting the correct movie in the challenge collection.. The value need to be set in the persistance since each user should have 
  * to guess the same movie presumably. If it does not exist do we set it. The id is todays data.
@@ -97,33 +98,40 @@ export function recordGuess(userID, guess){
 */
 export function fetchChallengeData(reactiveModel){
     /**
-     * For now is the unique identifier for the challenge the data. It works, but if we want to be very accurate do we need to handle 
-     * time zones as well.
+     * For now is the unique identifier for the challenge the date. There are potential w
      */
     const date = new Date().toISOString().split("T")[0];;
-    const challengeDocRef = doc(db, CHALLENGECOLLECTSION, date); // the challengeID is that data.
-    getDoc(challengeDocRef).then(handleChallenge)
+    const challengeDocRef = doc(db, CHALLENGECOLLECTSION, date); // the challengeID is that date 
+    getDoc(challengeDocRef).then(handleChallenge) // might need to attach the onSnapshot in the end.
 
     function handleChallenge(challengeSnapshot){
         if(!challengeSnapshot.exists()){
-            // How to handle dates will need further consideration, but this is a start.
-            let dataForCloud = {
-                challengeID: date, 
-                correctMovie: reactiveModel.correctMovie,
-                // Can be on the form {userID: 123, "score":   timestamp: } Can use the timestamp as tiebreaker perhaphs.
+          // If a challenge with todays data does not exist do we need to create it. 
+          return getExpectedMovieID({
+            minBudget: reactiveModel.minBudget,
+            popular:   reactiveModel.popular
+          })
+          .then(function(movie){
+            // Create and set the challengeDoc for the day. 
+            return setDoc(challengeDocRef, {
+                challengeID: date,
+                correctMovie: movie,
+                // The leaderboard for todays challenge, not the 
                 leaderboard: {}
-            }
-            // 
-            setDoc(challengeDocRef,dataForCloud,{merge: true})
 
+            }, {merge: true});
+          });
         }
 
     } 
-    onSnapshot(challengeDocRef, handleChallengeSnapshot)
-    function handleChallengeSnapshot(doc){
-            reactiveModel.correctMovie = doc.data()
-    }
-
+    // This should always be activated when to code is run. 
+    onSnapshot(challengeDocRef, handleSnapshot)
+    function handleSnapshot(docSnap) {
+        const data = docSnap.data() || {};
+        reactiveModel.correctMovie = data.correctMovie;
+        reactiveModel.challengeID  = data.challengeID;
+        reactiveModel.leaderboard  = data.leaderboard || {};
+      }
 }
 
 

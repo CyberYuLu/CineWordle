@@ -2,7 +2,8 @@
 // Model for representing the app.
 // Should probably have on model for everything. T
 import { resolvePromise } from "./resolvePromise";
-import {getExpectedMovieID, getMovieDetails, searchMovies} from "./fetchData"
+import {getExpectedMovieID, getMovieDetails, searchMovies, fetchGenreMap} from "./fetchData"
+import { makeAutoObservable, runInAction} from "mobx";
 
 export const model = {
     /**
@@ -11,6 +12,9 @@ export const model = {
      */
     correctMovie: null,
 
+    // set the genremap to null and then populate it later.
+    genreMap: null,
+  
     /**
      * Store the currently authenticated user. All the information 
      */
@@ -33,9 +37,8 @@ export const model = {
       promise: null,
     },
     currentMoviePromiseState: {},
-    leaderBoard: [],      // Add this here, but not sure if necessary.
 
-
+   
 
     // sets the expected movie
     setExpectedMovie(movie){
@@ -112,13 +115,18 @@ export const model = {
       },
 
 
-    /**
-     * I guess we can assume the leaderboard is part of the model. Add some methods here then.
-     * The leaderboard can be populated by pulling from the firestore.
-     */
 
 
     // need to add a function for calculting the value we base the leaderboard on.
 };
 
+// make the plain object observable
+// Will need to adjust the state management. 
+makeAutoObservable(model);
 
+// —— One‐time initialization: load genres on startup ——
+fetchGenreMap().then(map => {
+  runInAction(() => {
+    model.genreMap = map;
+  });
+});

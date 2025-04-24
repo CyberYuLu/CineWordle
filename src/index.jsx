@@ -17,12 +17,16 @@ const reactiveModel= observable(model);
 
 import hardcodeData from "/hardcodeData.json";
 reactiveModel.correctMovie = hardcodeData.targetMovie;
-reactiveModel.guesses = hardcodeData.guesses;
+reactiveModel.guesses = hardcodeData.guesses; 
+
+
+// It keeps track of todays date
+//fetchChallengeData(reactiveModel); 
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // We set these values here since
-    reactiveModel.currentUser = {uid: user.uid,email: user.email,};
+    reactiveModel.currentUser = {userID: user.uid, email: user.email,};
     fetchUserData(user, reactiveModel)
   } else {
     // No user is signed in; clear the current user from your model.

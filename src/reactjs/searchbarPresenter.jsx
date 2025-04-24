@@ -1,7 +1,8 @@
 // SearchBar.jsx
 import { observer } from "mobx-react-lite";
 import { SearchBarView } from "../views/searchbarView";
-
+import { getMovieDetails } from "../fetchData";
+import { recordGuess } from "../firebase";
 function debounce(callback, delay) {
   let timerId;
   function debounced(...args) {
@@ -43,10 +44,24 @@ const SearchBar = observer(function SearchBar(props) {
     props.model.setCurrentGuess(movie.id);
   }
   
-  // When the submit button is clicked, use the selected movie id.
+  /**
+   * When the user submits a guess will the persistence for the user be updated with the guess.
+   * Might need to adjust the fetch to aviod race conditions. 
+   */
   function clickButtonACB() {
     if (props.model.currentGuess) {
       console.log("Submitting movie id:", props.model.currentGuess);
+      // getting the details about the movie
+      getMovieDetails(props.model.currentGuess)
+      .then(movieDetails =>{
+        console.log("Got details:", movieDetails);
+        // set the movie in persistance. 
+        console.log("UID:", props.model.currentUser.uid);
+        console.log("Email:", props.model.currentUser.email);
+        recordGuess(props.model.currentUser.uid, movieDetails);
+
+      });
+      
     } else {
       console.log("No movie has been set.");
     }
