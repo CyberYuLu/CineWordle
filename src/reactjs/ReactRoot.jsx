@@ -5,6 +5,7 @@ import { Sidebar } from "./sidebarPresenter.jsx";
 import { createLoginPresenter } from "./loginPresenter.jsx";
 import { createRegisterPresenter } from "./registerPresenter.jsx";
 import { TutorialPresenter } from "./tutorialPresenter.jsx";
+import { ProfilePresenter } from "./profilePresenter.jsx";
 
 
 function LoginWrapper({ model }) {
@@ -24,6 +25,7 @@ function makeRouter(model) {
         { path: "/login", element: <LoginWrapper model={model}/>},
         { path: "/register", element: <RegisterWrapper model={model}/> },
         { path: "/how-to-play", element: <TutorialPresenter model={model} /> },
+        { path: "/profile", element: <ProfilePresenter model={model} /> },
   ]);
 }
 

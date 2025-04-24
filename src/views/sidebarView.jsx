@@ -1,24 +1,30 @@
+import '../styles/navbar.css';
+
+
 export function SidebarView(props) {
     const { user, onSignOut } = props;
 
     return (
-        <div>
-            {user ? (
-                <>
-                    <p>Welcome, {user.email}</p>
-                    <button onClick={onSignOut}>Sign Out</button>
-                    <button onClick={handleUserMainClickACB}>Main Menu</button>
-                </>
-            ) : (
-                <>
-                    <button onClick={handleUserLoginClickACB}>Login</button>
-                    <button onClick={handleUserRegisterClickACB}>Create Account</button>
-                    <button onClick={handleUserMainClickACB}>Main Menu</button>
-
-                </>
-            )}
-        </div>
+        <nav className="navbar">
+            <div className="navbar-left">
+                <button onClick={handleUserMainClickACB}>Main Menu</button>
+            </div>
+            <div className="navbar-right">
+                {user ? (
+                    <>
+                        <button onClick={handleUserProfileClickACB}>Profile</button>
+                        <button onClick={onSignOut}>Sign Out</button>
+                    </>
+                ) : (
+                    <>
+                        <button onClick={handleUserLoginClickACB}>Login</button>
+                        <button onClick={handleUserRegisterClickACB}>Create Account</button>
+                    </>
+                )}
+            </div>
+        </nav>
     );
+
 
     function handleUserRegisterClickACB(evt) {
         window.location.hash = "#/register";
@@ -30,5 +36,9 @@ export function SidebarView(props) {
 
     function handleUserMainClickACB(evt) {
         window.location.hash = "#/game";
+    }
+
+    function handleUserProfileClickACB(evt) {
+        window.location.hash = "#/profile";
     }
 }

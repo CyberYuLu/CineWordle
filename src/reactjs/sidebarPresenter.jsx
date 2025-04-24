@@ -7,7 +7,7 @@ const Sidebar = observer(function SidebarRender(props) {
     async function handleSignOut() {
         try {
             await signOut(auth);
-            props.model.user = null;
+            props.model.currentUser = null;
         } catch (error) {
             console.error("Error signing out:", error);
         }
@@ -15,7 +15,7 @@ const Sidebar = observer(function SidebarRender(props) {
 
     return (
         <SidebarView
-            user={props.model.user}
+            user={props.model.currentUser}
             onSignOut={handleSignOut}
         />
     );
