@@ -132,3 +132,53 @@
   color: #333;
   border-radius: 5px;
 }
+
+
+/* ================== NOTFICATION VIEW ==================== */
+
+/* Notification container */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  color: white;
+  z-index: 1000;
+  animation: slideIn 0.5s ease, fadeOut 3s ease 2.5s forwards;
+}
+
+/* Correct guess notification */
+.notification.correct {
+  background-color: #4CAF50; /* Green */
+  box-shadow: 0 4px 6px rgba(0, 128, 0, 0.2);
+}
+
+/* Incorrect guess notification */
+.notification.incorrect {
+  background-color: #F44336; /* Red */
+  box-shadow: 0 4px 6px rgba(255, 0, 0, 0.2);
+}
+
+/* Slide-in animation */
+@keyframes slideIn {
+  from {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+
+/* Fade-out animation */
+@keyframes fadeOut {
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
+  }
+}
