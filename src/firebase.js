@@ -38,12 +38,20 @@ window.db = db
 // We have at least two collections, one for the user and one for todays challenge.
 const USERCOLLECTION = "users"
 const CHALLENGECOLLECTSION = "challenge" 
+const GUESSES = "guesses"
 
+// Utility to get YYYY-MM-DD
+function todayID() {
+    return new Date().toISOString().split("T")[0];
+  }
 
 
 export function fetchUserData(user, reactiveModel){
     // The documents holding the users. 
     const userDocRef = doc(db, USERCOLLECTION, user.uid); 
+    // uses userDocRef to make it a subCollection of users. 
+    const guessDocRef = doc(userDocRef, GUESSES, todayID());
+
     getDoc(userDocRef).then(handleUsers)
     function handleUsers(userSnapShot){
         // If the user does not exist.
@@ -52,7 +60,6 @@ export function fetchUserData(user, reactiveModel){
                 // uid is the name of the field we get from firebase
                 uid: user.uid,
                 email: user.email,
-                currentChallenge: {challengeID: null, guesses: []},   // contans the challengeID (the current data)and guesses
                 statistics: {}, 
             }
             // We create a new 
@@ -61,36 +68,50 @@ export function fetchUserData(user, reactiveModel){
     }
     // Listen for real time updates on collection for users. 
     // This now reacts as soon as any attributes changes. Could maybe be replaced with a custom function that only 
-    // react to a subset of attributes.
+    // reacts to a subset of changes.
     onSnapshot(userDocRef, handleSnapshot)
     function handleSnapshot(doc){
         reactiveModel.currentUser = doc.data()
     }
+
+    getDoc(guessDocRef).then(handleGuesses)
+    function handleGuesses(guessesSnapShot){
+        if(!guessesSnapShot.exists()){
+            let letGuessData = {
+                guess: []
+            }
+            setDoc(guessDocRef, letGuessData); 
+        }
+        // 
+    }
+    onSnapshot(guessDocRef, handleGuessSnapshot);
+    function handleGuessSnapshot(snap){
+        const data = snap.exists() ? snap.data() : { guesses: [] };
+        reactiveModel.guess  = data.guess; 
+    }
+
+
 }
+
+/**
+ *  TODO. A function for changing the attributes for an user. Do not know which users yet though. 
+ * 
+ *  */ 
 
 /**
  * Function for updating the guesses in the USERCOLLECTION. We will either need separate functions for changing the current challenge when the day changes and 
  * also need methods for changing the statistics.
- * 
- * @param guess should contain all the attributes of the guess.
- * 
  */
-export function recordGuess(userID, guess){
-    const userDocRef = doc(db, USERCOLLECTION, userID); 
-    return updateDoc(userDocRef, {
-        "currentChallenge.guesses" : arrayUnion(guess)
+export function recordGuess(userID, guess) {
+    const guessDocRef = doc(db, USERCOLLECTION, userID, GUESSES, todayID());
+    return updateDoc(guessDocRef, {
+      guess: arrayUnion(guess)
     })
-    .then(() => {
-        // 
-        console.log("guesses recorded successfully.")
-    }
-    ).catch((error)=> {
-        console.error("Error recording guess:", error);
-    }
-    );
-    
-}
+    .then(() => console.log("guess recorded"))
+    .catch(err => console.error("Error recording guess:", err));
+  }
 
+  
 /**
  * A function for setting the correct movie in the challenge collection.. The value need to be set in the persistance since each user should have 
  * to guess the same movie presumably. If it does not exist do we set it. The id is todays data.
@@ -100,7 +121,7 @@ export function fetchChallengeData(reactiveModel){
     /**
      * For now is the unique identifier for the challenge the date. There are potential w
      */
-    const date = new Date().toISOString().split("T")[0];;
+    const date = todayID();
     const challengeDocRef = doc(db, CHALLENGECOLLECTSION, date); // the challengeID is that date 
     getDoc(challengeDocRef).then(handleChallenge) // might need to attach the onSnapshot in the end.
 
@@ -170,8 +191,7 @@ export function updateCorrectMovie(challengeID, correctMovie) {
 
 /**
  * If we also want to implement a global leaderboard could that be implemented in two ways primarily. 
- *  - The first option is to add, total games played, total attemps and average attemps to the statistics field for the users. 
- *  - The second option is to add another collection with userID, total attemps, total challanges and average attempts instead of tying thosse values to the user.
+ *    
  * 
  */
 

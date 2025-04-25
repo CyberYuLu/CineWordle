@@ -20,7 +20,7 @@ reactiveModel.correctMovie = hardcodeData.targetMovie;
 reactiveModel.guesses = hardcodeData.guesses; 
 
 
-// It keeps track of todays date
+// It keeps track of todays date. 
 //fetchChallengeData(reactiveModel); 
 
 onAuthStateChanged(auth, (user) => {

@@ -158,6 +158,8 @@ export function getMovieDetails(id){
 }
 
 
+
+
 /**
  * Need to fetch the genre list. 
  * 

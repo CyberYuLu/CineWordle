@@ -20,7 +20,14 @@ export const model = {
      */
     currentUser : null, 
     leaderBoard :  [],  // The values can be collected from firebase intially and when something changes.
-    guesses: [], // Can keep the guesses locally and when the user logs out can they be pushed to the firebase and this can be reset. 
+    /**
+     * Keep the guesses locally, but pick them up from the persistence. 
+     * 
+     */
+    guesses: [], 
+
+    // Had to change to this since the guesses aboved interfered. 
+    guess: [], 
 
     // Parameters for filtering which movies we can select from. Minbudget is obvious.
     popular: true,
