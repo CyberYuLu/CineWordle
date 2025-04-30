@@ -29,9 +29,9 @@ export const model = {
     // Had to change to this since the guesses aboved interfered. 
     guess: [], 
 
-    // Parameters for filtering which movies we can select from. Minbudget is obvious.
+    // Parameters for filtering which movies we can select from..
     popular: true,
-    minBudget: 100000, 
+    
 
     
     // currentGuess is the id.
@@ -121,10 +121,18 @@ export const model = {
         }
       },
 
+    getYear(dateString) {
+        return dateString ? `(${new Date(dateString).getFullYear()})` : '';
+    }
 
 
 
-    // need to add a function for calculting the value we base the leaderboard on.
+      /**
+       *  Some code for an experiment. 
+       * 
+       */
+
+
 };
 
 // make the plain object observable
