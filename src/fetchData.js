@@ -10,13 +10,9 @@
  * First function to make sure the API works as expected. It can also be used to get all possible movies to chose from.
  * The possible movies to choose from might need to be filtered as well to avoid to obscure movies.
  * 
- * There is no way to directly get a random movie. The two options are to get 500 pages of movies (500 * 20 = 10000 movies in total) based on some search criteria 
- * to avoid obscure movies. The other would be to get the maximum id with the latest endpoint and then use and id between 1 
- * and that max id,we also have to take into account that some id:s do not exist and handled 404s and go to the nex guess.
- * But if we use that approach can we not filter so would need to genereate one, select those that do not generate 404s and then apply filtering 
- * and if the filtering do not match, do it all again.
- * 
  * This code uses the first approach. The criteria are minium budget and sorting by popular.
+ * 
+ * Like getMovieDetails does it use append_to_response. 
  */
 export function getExpectedMovieID({minBudget, popular}){  
     const options = {
@@ -27,37 +23,35 @@ export function getExpectedMovieID({minBudget, popular}){
         }
     };
     
-    let baseUrl = `https://api.themoviedb.org/3/discover/movie?`;
-    // Apply filters based on the criteria provided
-     const params = [];
-    if (minBudget) {
-        params.push(`with_budget.gte=${minBudget}`);
-    }
-    if (popular) {
-        params.push(`sort_by=popularity.desc`);
-    } 
-    baseUrl += params.join('&');
+  // 1) Build the discover URL
+  let baseUrl = new URL('https://api.themoviedb.org/3/discover/movie');
+  if (popular)   baseUrl.searchParams.set('sort_by', 'popularity.desc');
 
 
-    fetch(baseUrl, options)
+    return fetch(baseUrl, options)
         .then(response => response.json())   // 
         .then(data => {
             let totalPages = data.total_pages; 
-            totalPages = Math.min(500, totalPages) // at most 500.
+
+            /**
+             * Important to restrict the number possible pagew 
+             * 
+             */
+            totalPages = Math.min(20, totalPages) 
 
             if(totalPages === 0){
-                console.log("No movies found with the given criteria.");
-                return
+                throw new Error('No movies match your criteria');
+
             }
             // Generate random page number
-            const randomPage = Math.floor(Math.random() * totalPages) + 1;
+            const page = Math.floor(Math.random() * totalPages) + 1;
             
             // Fetch the specific random page.
-            const pageUrl = `${baseUrl}&page=${randomPage}`;
-            return fetch(pageUrl, options);
+            baseUrl.searchParams.set('page', page);
+            return fetch(baseUrl, options);
             
         } ).
-        then(response => response && response.json()).
+        then(response => response.json()).
         // Get a random movie on the page and some error handling. Return if works correctly.
         then(data => {
             if (!data || !data.results || data.results.length === 0) {
@@ -69,9 +63,46 @@ export function getExpectedMovieID({minBudget, popular}){
               const randomMovie = data.results[randomIndex]
               console.log("Random Movie:", randomMovie);
 
-        }).
+              // Fetch the full details of the movie we want with an append. 
+              const detailUrl = `https://api.themoviedb.org/3/movie/${randomMovie.id}` +
+              `?append_to_response=credits`;
+                
+              return fetch(detailUrl, options);
 
-        catch(err => console.error(err));
+              
+        }).
+        then(response => response.json())
+        .then(full => {
+
+            // Map out the directors.
+            const directors = full.credits.crew
+            .filter(m => m.job === 'Director')
+            .map(d => d.name);
+    
+            //Map out the actors
+            const characters = full.credits.cast.map(c => ({
+                actor:     c.name,
+                character: c.character
+              }));
+            
+              
+            // 4) Return the combined movie object
+            return {
+                id:                   full.id,
+                title:                full.title,
+                budget:               full.budget,
+                original_language:    full.original_language,
+                production_companies: full.production_companies,
+                production_countries: full.production_countries,
+                release_date:         full.release_date,
+                poster_path:          full.poster_path,
+                overview:             full.overview,
+                directors, 
+                characters
+            };
+
+        });
+        // will need to handle the error differentl.
     
 }
 
@@ -91,9 +122,23 @@ export function searchMovies(query){
     };
   
     const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`;
-  // **Return** the fetch promise.
   return fetch(url, options)
     .then(res => res.json())
+    .then(data => {
+        if(Array.isArray(data.results)){
+            // We are only interested in results the required fields are filled.
+            data.results = data.results.filter(movie =>
+                            movie.release_date &&
+                            movie.poster_path &&
+                            movie.overview && movie.genre_ids, 
+
+                       );
+            // Also sort the results based on the popularity.
+            data.results.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+
+        }
+        return data;
+    })
     .catch(err => {
       console.error(err);
       throw err;
@@ -101,9 +146,10 @@ export function searchMovies(query){
 }
 
 
-// Function for getting even more details about a movie based in its IMDB id. 
-// It is the movie end-point with the id appended to the end. Can also use Find by ID
-// We will need to filter out the specific details we want. 
+/**
+ *  Function for getting the specific data based on the id.
+ *  Uses append to response to also get information on credits.
+ */
 export function getMovieDetails(id){
     const options = {
         method: 'GET',
@@ -113,9 +159,74 @@ export function getMovieDetails(id){
         }
       };
 
-      const url = `https://api.themoviedb.org/3/movie/${id}`;
-      fetch(url, options)
+      const url = `https://api.themoviedb.org/3/movie/${id}` +
+      '?append_to_response=credits';
+      return fetch(url, options)
         .then(res => res.json())
-        .then(res => console.log(res))
+        .then(res => {
+            
+            const details = res;
+            const credits = res.credits; 
+
+            // Map out the directors.
+            const directors = credits.crew
+            .filter(m => m.job === 'Director')
+            .map(d => d.name);
+    
+            //Map out the actors
+            const characters = credits.cast.map(c => ({
+                actor:     c.name,
+                character: c.character
+              }));
+
+            return  { 
+                    id: details.id,
+                    title: details.title, 
+                    budget: details.budget, 
+                    genres: details.genres, 
+                    release_date: details.release_date, 
+                    original_language: details.original_language,
+                    poster_path: details.poster_path,
+                    overview: details.overview,          // An overview of the movie.
+                    production_countries: details.production_countries,
+                    production_companies: details.production_companies,
+                    directors, 
+                    characters,
+
+             }
+
+        } )
+        .catch(err => console.error(err));
+}
+
+
+
+
+/**
+ * Need to fetch the genre list. 
+ * 
+ */
+let genreMap = null; 
+export function fetchGenreMap(){
+    const options = {
+        method: 'GET',
+     headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NmM4Y2ZlNmIxMWIyMzVlMzRiMjk1YjU2YmJmZGRmOCIsIm5iZiI6MTc0MzE2NTA3Ni4xNzkwMDAxLCJzdWIiOiI2N2U2OTY5NDE0YmJhNmFlMzEwMDJmMGMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.VEYRiCzXDO6rLqMKpPCQF8X1TIsaO8k5MdVqf6IyT1A'
+    }
+    };
+    
+
+    return fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
+        .then(res => res.json())
+        .then(res  => {
+            // genres is an array of objects.s
+            genreMap = res.genres.reduce((map, g) => {
+                map[g.id] = g.name; 
+                return map;
+            }, {})
+            return genreMap;
+
+        })
         .catch(err => console.error(err));
 }

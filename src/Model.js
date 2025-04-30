@@ -2,7 +2,8 @@
 // Model for representing the app.
 // Should probably have on model for everything. T
 import { resolvePromise } from "./resolvePromise";
-import {getExpectedMovieID, getMovieDetails, searchMovies} from "./fetchData"
+import {getExpectedMovieID, getMovieDetails, searchMovies, fetchGenreMap} from "./fetchData"
+import { makeAutoObservable, runInAction} from "mobx";
 
 export const model = {
     /**
@@ -11,16 +12,26 @@ export const model = {
      */
     correctMovie: null,
 
+    // set the genremap to null and then populate it later.
+    genreMap: null,
+  
     /**
      * Store the currently authenticated user. All the information 
      */
     currentUser : null, 
     leaderBoard :  [],  // The values can be collected from firebase intially and when something changes.
-    guesses: [], // Can keep the guesses locally and when the user logs out can they be pushed to the firebase and this can be reset. 
+    /**
+     * Keep the guesses locally, but pick them up from the persistence. 
+     * 
+     */
+    guesses: [], 
 
-    // Parameters for filtering which movies we can select from. Minbudget is obvious.
+    // Had to change to this since the guesses aboved interfered. 
+    guess: [], 
+
+    // Parameters for filtering which movies we can select from..
     popular: true,
-    minBudget: 100000, 
+    
 
     
     // currentGuess is the id.
@@ -33,9 +44,8 @@ export const model = {
       promise: null,
     },
     currentMoviePromiseState: {},
-    leaderBoard: [],      // Add this here, but not sure if necessary.
 
-
+   
 
     // sets the expected movie
     setExpectedMovie(movie){
@@ -111,14 +121,27 @@ export const model = {
         }
       },
 
-
-    /**
-     * I guess we can assume the leaderboard is part of the model. Add some methods here then.
-     * The leaderboard can be populated by pulling from the firestore.
-     */
+    getYear(dateString) {
+        return dateString ? `(${new Date(dateString).getFullYear()})` : '';
+    }
 
 
-    // need to add a function for calculting the value we base the leaderboard on.
+
+      /**
+       *  Some code for an experiment. 
+       * 
+       */
+
+
 };
 
+// make the plain object observable
+// Will need to adjust the state management. 
+makeAutoObservable(model);
 
+// —— One‐time initialization: load genres on startup ——
+fetchGenreMap().then(map => {
+  runInAction(() => {
+    model.genreMap = map;
+  });
+});

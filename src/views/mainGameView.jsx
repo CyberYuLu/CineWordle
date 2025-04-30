@@ -66,7 +66,7 @@ export const MainGameView = observer((props) => {
             <th  className="guess-cell">Prop2</th>
 
           </tr>
-          {props.guesses.map(displayGuessCB)}
+          {props.guesses.slice().reverse().map(displayGuessCB)}
         </tbody>
       </table>
     </div>

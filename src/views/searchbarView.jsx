@@ -1,36 +1,67 @@
 // SearchBarView.jsx
-import React from "react";
+import "/src/style.css";
 
-export function SearchBarView({ query, suggestions, onQueryChange, onSuggestionSelect, onSubmitButtonClick }) {
+//export function SearchBarView({ query, suggestions, onQueryChange, onSuggestionSelect, onSubmitButtonClick }) {
   
-  // Local named callback for the submit button.
-  function handleSubmitABC() {
-    onSubmitButtonClick();
-  }
-  
+
+export function SearchBarView({
+  query,
+  suggestions,
+  onQueryChange,
+  onSuggestionSelect,
+  onSubmitButtonClick,
+}) {
   return (
-    <div style={{ position: "relative" }}>
+    <div className="searchBarContainer">
       <input
         type="text"
         placeholder="Enter movie guess"
         value={query}
         onChange={onQueryChange}
+        className="searchBarInput"
       />
-      
+      <button
+        onClick={onSubmitButtonClick}
+        className="searchBarButton"
+      >
+        Submit
+      </button>
+
       {query.length > 2 && suggestions.length > 0 && (
-        <div className="options" >
-          {suggestions.map((movie) => (
-            <div
-              key={movie.id}
-              onClick={() => onSuggestionSelect(movie)}
-              style={{ padding: "8px", cursor: "pointer" }}
-            >
-              {movie.title}
-            </div>
-          ))}
+        <div className="searchBarOptions">
+          {suggestions.map((movie) => {
+            // Extract just the year from release_date
+            const year = movie.release_date
+              ? movie.release_date.substring(0, 4)
+              : "";
+
+            return (
+              <div
+                key={movie.id}
+                onClick={() => onSuggestionSelect(movie)}
+                className="searchBarOptionItem"
+              >
+                <div className="searchBarOptionText">
+                  <span className="searchBarTitle">{movie.title}</span>
+                  {year && (
+                    <span className="searchBarReleaseYear">
+                      ({year})
+                    </span>
+                  )}
+                </div>
+
+                {movie.poster_path && (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
+                    alt={`${movie.title} poster`}
+                    className="searchBarPosterThumb"
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
-      <button onClick={handleSubmitABC}>Submit</button>
     </div>
   );
 }
