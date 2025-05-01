@@ -15,6 +15,7 @@ function debounce(callback, delay) {
 }
 
 const SearchBar = observer(function SearchBar(props) {
+  const { model, setNotification, setIsCorrect } = props;
   // When this function is called, it will execute the search.
   function performSearch(query) {
     
@@ -48,22 +49,30 @@ const SearchBar = observer(function SearchBar(props) {
    * When the user submits a guess will the persistence for the user be updated with the guess.
    * Might need to adjust the fetch to aviod race conditions. 
    */
-  function clickButtonACB() {
-    if (props.model.currentGuess) {
-      console.log("Submitting movie id:", props.model.currentGuess);
-      // getting the details about the movie
-      getMovieDetails(props.model.currentGuess)
-      .then(movieDetails =>{
-        console.log("Got details:", movieDetails);
-        // set the movie in persistance. 
-        console.log("UID:", props.model.currentUser.uid);
-        console.log("Email:", props.model.currentUser.email);
-        recordGuess(props.model.currentUser.uid, movieDetails);
 
-      });
-      
+  function clickButtonACB() {
+    if (model.currentGuess) {
+      console.log("Submitting movie id:", model.currentGuess);
+      getMovieDetails(model.currentGuess)
+        .then(movieDetails => {
+          console.log("Got details:", movieDetails);
+          recordGuess(model.currentUser.uid, movieDetails);
+          model.addGuessForUser(movieDetails); // Don't forget this if needed!
+  
+          const isCorrect = movieDetails.title === model.correctMovie.title;
+          setIsCorrect(isCorrect);
+          setNotification(isCorrect ? "Correct guess!" : `"${movieDetails.title}" has been added!`);
+  
+          setTimeout(() => setNotification(""), 3000);
+        })
+        .catch(err => {
+          console.error(err);
+          setNotification("Failed to fetch movie details.");
+          setIsCorrect(false);
+        });
     } else {
-      console.log("No movie has been set.");
+      setNotification("No movie selected.");
+      setIsCorrect(false);
     }
   }
   

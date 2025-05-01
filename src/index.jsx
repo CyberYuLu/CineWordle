@@ -15,13 +15,13 @@ configure({ enforceActions: "never" });
 import {model} from "/src/Model.js"
 const reactiveModel= observable(model);
 
-import hardcodeData from "/hardcodeData.json";
-reactiveModel.correctMovie = hardcodeData.targetMovie;
-reactiveModel.guesses = hardcodeData.guesses; 
+//import hardcodeData from "/hardcodeData.json";
+//reactiveModel.correctMovie = hardcodeData.targetMovie;
+//reactiveModel.guesses = hardcodeData.guesses; 
 
 
 // It keeps track of todays date. 
-//fetchChallengeData(reactiveModel); 
+fetchChallengeData(reactiveModel); 
 
 onAuthStateChanged(auth, (user) => {
   if (user) {

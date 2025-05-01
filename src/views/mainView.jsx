@@ -1,6 +1,5 @@
 
 import "/src/style.css"
-import { SearchBar } from "../reactjs/searchbarPresenter";
 import TutorialView from "./tutorialView";
 
 
@@ -35,10 +34,7 @@ export function MainView(props) {
                     How to play
                 </button>
             </div>
-            <div>
-                <SearchBar model={props.model} />
 
-            </div>
             <TutorialView />
         </div>
     );

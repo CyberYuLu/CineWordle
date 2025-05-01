@@ -4,9 +4,9 @@ import "/src/style.css";
 
 export const LosingView = observer((props) => {
     const movie = {
-        name: props.model.correctMovie.name,
-        description: props.model.correctMovie.summary,
-        image: props.model.correctMovie.img,
+        name: props.model.correctMovie.title,
+        description: props.model.correctMovie.overview,
+        image: props.model.correctMovie.poster_path,
     };
 
     const numberOfGuesses = props.model.guesses.length;    
@@ -20,7 +20,7 @@ export const LosingView = observer((props) => {
             <div className="movie-details">
                 <h2>The correct answer was: {movie.name}</h2>
                 <p>{movie.description}</p>
-                <img src={movie.image} alt={movie.name} />
+                <img src={`https://image.tmdb.org/t/p/w300${movie.image}`} alt={movie.name} />
             </div>
             <button onClick={props.onButtonClick}>Try Again</button>
         </div>

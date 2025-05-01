@@ -4,9 +4,9 @@ import "/src/style.css";
 
 export const WinningView = observer((props) => {
     const movie = {
-        name: props.model.correctMovie.name,
-        description: props.model.correctMovie.summary,
-        image: props.model.correctMovie.img,
+        name: props.model.correctMovie.title,
+        description: props.model.correctMovie.overview,
+        image: props.model.correctMovie.poster_path,
     };
 
     const numberOfGuesses = props.model.guesses.length;    
@@ -19,7 +19,7 @@ export const WinningView = observer((props) => {
             <div className="movie-details">
                 <h2>{movie.name}</h2>
                 <p>{movie.description}</p>
-                <img src={movie.image} alt={movie.name} />
+                <img src={`https://image.tmdb.org/t/p/w300${movie.image}`} alt={movie.name} />
             </div>
             <button onClick={props.onButtonClick}>Exit !</button>
         </div>

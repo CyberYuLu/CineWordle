@@ -88,6 +88,8 @@ export function fetchUserData(user, reactiveModel){
     function handleGuessSnapshot(snap){
         const data = snap.exists() ? snap.data() : { guesses: [] };
         reactiveModel.guess  = data.guess; 
+        reactiveModel.guesses  = data.guess; 
+
     }
 
 
