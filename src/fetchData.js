@@ -90,6 +90,7 @@ export function getExpectedMovieID({minBudget, popular}){
             return {
                 id:                   full.id,
                 title:                full.title,
+                genres:               full.genres, 
                 budget:               full.budget,
                 original_language:    full.original_language,
                 production_companies: full.production_companies,
