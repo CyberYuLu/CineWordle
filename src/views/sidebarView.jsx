@@ -8,6 +8,7 @@ export function SidebarView(props) {
         <nav className="navbar">
             <div className="navbar-left">
                 <button onClick={handleUserMainClickACB}>Main Menu</button>
+                <button onClick={handleUserLeaderboardClickACB}>Leaderboard</button>
             </div>
             <div className="navbar-right">
                 {user ? (
@@ -32,6 +33,10 @@ export function SidebarView(props) {
 
     function handleUserLoginClickACB(evt) {
         window.location.hash = "#/login";
+    }
+
+    function handleUserLeaderboardClickACB(evt) {
+        window.location.hash = "#/leaderboard";
     }
 
     function handleUserMainClickACB(evt) {
