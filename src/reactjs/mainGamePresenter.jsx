@@ -20,11 +20,14 @@ const MainGame = observer(
             <div>
 
                 <div>
-                <SearchBar
+                {!(props.model.win || props.model.loose) && < SearchBar
                     model={props.model}
                     setNotification={setNotification}
                     setIsCorrect={setIsCorrect}
                 />
+                || props.model.win && <h1 style={{ textAlign: "center" }}>You won !</h1>
+                || props.model.loose && <h1 style={{ textAlign: "center" }}>You lost !</h1>
+                }
                 </div>
                 <NotificationView notification={notification} isCorrect={isCorrect} />
                 {props.model.correctMovie && <HintsPresenter model={props.model} /> || <SuspenseView />}

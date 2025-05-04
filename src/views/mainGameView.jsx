@@ -6,85 +6,93 @@ import { toJS } from "mobx";
 
 export const MainGameView = observer((props) => {
 
+  const targetTitle = props.model.correctMovie?.title || "No Data";
+  const targetYear = props.model.correctMovie?.release_date.split("-")[0] || 0;
+  const targetBudget = props.model.correctMovie?.budget.toLocaleString("fr-FR") || 0;
+  const targetCompany = props.model.correctMovie?.production_companies[0]?.name || "No Data";
+  const targetCountry = props.model.correctMovie?.production_countries[0]?.name || "No Data";
+  const targetDirector = props.model.correctMovie?.directors[0] || "No Data";
+
+  const genresTarget = props.targetMovie?.genres.map(g => ("" + g.name));
+
   function displayGuessCB (guess)  
   {
-    const nameCorrect = guess.title === props.targetMovie.title;
-    const yearCorrect = guess.release_date.split("-")[0] === props.targetMovie.release_date.split("-")[0];
-    console.log(guess.genres);
 
 
-    const genres = guess.genres.map(g => ("" + g.name));
-    console.log(props.targetMovie.genres)
-    //const genresTarget = props.targetMovie.genres.map(g => ("" + g.name));
-    //set hardcoded values for the genres.
-    const genresTarget = ["Action", "Fantasy"];
+    const title = guess?.title || "No Data";
+    const releaseYear = guess?.release_date.split("-")[0] || 0;
+    const budget = guess?.budget.toLocaleString("fr-FR") || 0;
+    const director = guess?.directors[0] || "No Data";
+    const company = guess?.production_companies[0]?.name || "No Data";
+    const country = guess?.production_countries[0]?.name || "No Data";
 
+    const genres = guess?.genres.map(g => ("" + g.name));
+
+
+    const nameCorrect = title === targetTitle;
+    const yearCorrect = releaseYear === targetYear;
+
+    const genresTarget = props.targetMovie.genres.map(g => ("" + g.name));
     const genreMatch = genres.some(g => genresTarget.includes(g));
-
     const genreCorrect = genres.length === genresTarget.length && genres.every((g) => genresTarget.includes(g));    
 
-    const budgetCorrect = guess.budget === props.targetMovie.budget;
-    const directorCorrect = guess.directors[0] === props.targetMovie.directors[0];
-
-    const companyCorrect = guess.production_companies[0].name === props.targetMovie.production_companies[0].name;
-    const countryCorrect = guess.production_countries[0].name === props.targetMovie.production_countries[0].name;
-
+    const budgetCorrect = budget === targetBudget;
+    const directorCorrect = director === targetDirector;
+    const companyCorrect = company === targetCompany;
+    const countryCorrect = country === targetCountry;
 
     const genreString = genres.join(", ");
 
-
     return (
-      <tr key={guess.title} className="guess-header">
+      <tr key={title} className="guess-header">
         <td className="guess-cell_image">
-          <img src={`https://image.tmdb.org/t/p/w300${guess.poster_path}`} alt={guess.title}   className="guess-image" />
+          <img src={`https://image.tmdb.org/t/p/w300${guess.poster_path}`} alt={title} className="guess-image" />
         </td>
-        <td  className={`guess-cell ${nameCorrect ? "correct" : "incorrect"}`}>{guess.title}</td>
+        <td className={`guess-cell ${nameCorrect ? "correct" : "incorrect"}`}>{title}</td>
         <td className={`guess-cell ${yearCorrect ? "correct" : "incorrect"}`}>
           <div className="numerical-container">
-            <span>{guess.release_date.split("-")[0]}</span>
+            <span>{releaseYear}</span>
             {!yearCorrect && (
               <span>
-                {guess.release_date.split("-")[0] > props.targetMovie.release_date.split("-")[0]? (
+                {releaseYear > targetYear ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" fill="black" viewBox="0 0 24 24">
-                    <path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 ) : (
                   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" fill="black" viewBox="0 0 24 24">
-                    <path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 )}
               </span>
             )}
           </div>
         </td>
-        <td className={`guess-cell ${genreCorrect? "correct" : genreMatch ? "partial" : "incorrect"}`}>{genreString}</td>
+        <td className={`guess-cell ${genreCorrect ? "correct" : genreMatch ? "partial" : "incorrect"}`}>{genreString}</td>
         <td className={`guess-cell ${budgetCorrect ? "correct" : "incorrect"}`}>
           <div className="numerical-container">
-            <span>{guess.budget.toLocaleString("fr-FR")}</span>
-            {!yearCorrect && (
+            <span>{budget.toLocaleString("fr-FR")}</span>
+            {!budgetCorrect && (
               <span>
-                {guess.budget > props.targetMovie.budget? (
+                {budget > targetBudget ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" fill="black" viewBox="0 0 24 24">
-                    <path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 ) : (
                   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" fill="black" viewBox="0 0 24 24">
-                    <path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 )}
               </span>
             )}
           </div>
         </td>
-
-        <td  className={`guess-cell ${directorCorrect ? "correct" : "incorrect"}`}>{guess.directors[0]}</td>
-        <td  className={`guess-cell ${companyCorrect ? "correct" : "incorrect"}`}>{guess.production_companies[0]?.name}</td>
-        <td  className={`guess-cell ${countryCorrect ? "correct" : "incorrect"}`}>{guess.production_countries[0]?.name}</td>
-
+        <td className={`guess-cell ${directorCorrect ? "correct" : "incorrect"}`}>{director}</td>
+        <td className={`guess-cell ${companyCorrect ? "correct" : "incorrect"}`}>{company}</td>
+        <td className={`guess-cell ${countryCorrect ? "correct" : "incorrect"}`}>{country}</td>
       </tr>
-      
     );
   };
+
   
 
   return (

@@ -3,7 +3,7 @@
 // Should probably have on model for everything. T
 import { resolvePromise } from "./resolvePromise";
 import {getExpectedMovieID, getMovieDetails, searchMovies, fetchGenreMap} from "./fetchData"
-import { makeAutoObservable, runInAction} from "mobx";
+import { makeAutoObservable, runInAction, set} from "mobx";
 
 export const model = {
     /**
@@ -44,6 +44,53 @@ export const model = {
       promise: null,
     },
     currentMoviePromiseState: {},
+
+  // ------------------------- WINNING MANAGEMENT + HINT MANAGEMENT -------------------------
+    //for win, loose management. 
+    win : false,
+    loose : false,
+    displayLoosingScreen : false,
+    displayWinningScreen : false,
+
+    guessForFirstHint : 3, 
+    guessForSecondHint : 5,
+    guessForLoose : 7,
+
+    setDisplayWinningScreen(display) {
+      this.displayWinningScreen = display;
+    },
+    setWin(win) {
+      if(!this.win)
+      {
+        //to avoid to display the winning screen twice.
+        this.displayWinningScreen = win;
+      }
+      this.win = win;
+      
+    },
+    setLoose(loose) {
+      if(!this.loose)
+      {
+        //to avoid to display the winning screen twice.
+        this.displayLoosingScreen = loose;
+      }
+      this.loose = loose;
+    },
+
+    setDisplayLoosingScreen(display) {
+      this.displayLoosingScreen = display;
+    },
+
+    firstHint: false,
+    secondHint: false,
+    setFirstHint(display) {
+      this.firstHint = display;
+    },
+    setSecondHint(display) { 
+      this.secondHint = display;
+    },
+
+    // ------------------------- MOVIE MANAGEMENT -------------------------
 
    
 
