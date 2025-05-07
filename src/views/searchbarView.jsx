@@ -1,11 +1,12 @@
 // SearchBarView.jsx
 import "/src/style.css";
-
+import { SuspenseView } from "./suspenseView";
 //export function SearchBarView({ query, suggestions, onQueryChange, onSuggestionSelect, onSubmitButtonClick }) {
   
 
 export function SearchBarView({
   query,
+  isLoading, 
   suggestions,
   onQueryChange,
   onSuggestionSelect,
@@ -27,9 +28,13 @@ export function SearchBarView({
         Submit
       </button>
 
-      {query.length > 2 && suggestions.length > 0 && (
+      {query.length > 2 &&  (
         <div className="searchBarOptions">
-          {suggestions.map((movie) => {
+           {isLoading ? (
+            <SuspenseView />
+          ) : (
+          
+          suggestions.map((movie) => {
             // Extract just the year from release_date
             const year = movie.release_date
               ? movie.release_date.substring(0, 4)
@@ -59,7 +64,8 @@ export function SearchBarView({
                 )}
               </div>
             );
-          })}
+          })
+        )}
         </div>
       )}
     </div>

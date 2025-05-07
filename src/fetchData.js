@@ -29,13 +29,21 @@ export function getExpectedMovieID({minBudget, popular}){
 
 
     return fetch(baseUrl, options)
-        .then(response => response.json())   // 
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        return response.json();
+        }) 
         .then(data => {
+            if (!data || !data.results || data.results.length === 0) {
+                throw new Error('Invalid API response format');
+              }
+
             let totalPages = data.total_pages; 
 
             /**
-             * Important to restrict the number possible pagew 
-             * 
+             * Important to restrict the number possible pages 
              */
             totalPages = Math.min(20, totalPages) 
 
@@ -51,12 +59,16 @@ export function getExpectedMovieID({minBudget, popular}){
             return fetch(baseUrl, options);
             
         } ).
-        then(response => response.json()).
+        then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json()
+        }).    
         // Get a random movie on the page and some error handling. Return if works correctly.
         then(data => {
             if (!data || !data.results || data.results.length === 0) {
-                console.log("No movies found on the random page.");
-                return;
+                throw new Error('No movies found on the selected page');
               }
             
               const randomIndex = Math.floor(Math.random() * data.results.length);
@@ -71,9 +83,16 @@ export function getExpectedMovieID({minBudget, popular}){
 
               
         }).
-        then(response => response.json())
+        then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(full => {
-
+            if (!full || !full.credits) {
+                throw new Error('Invalid movie details format');
+            }
             // Map out the directors.
             const directors = full.credits.crew
             .filter(m => m.job === 'Director')
@@ -102,18 +121,23 @@ export function getExpectedMovieID({minBudget, popular}){
                 characters
             };
 
-        });
-        // will need to handle the error differentl.
-    
+        })
+        .catch(error => {
+            console.error('Error in getExpectedMovieID:', error);
+            throw new Error(`Failed to fetch movie: ${error.message}`);
+        });    
 }
 
 /**
  *  Function for returning the movies matching a string, starting from two or three  letters. 
  * !!! Might need to to add some method to ease the demand on the API, can be done with a timer. !!!!
- *  
+ *  a
  *  These results should probably be sorted based on
  */
 export function searchMovies(query){
+    if (!query || typeof query !== 'string') {
+        return Promise.reject(new Error('Invalid search query'));
+    }
     const options = {
         method: 'GET',
         headers: {
@@ -124,8 +148,17 @@ export function searchMovies(query){
   
     const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`;
   return fetch(url, options)
-    .then(res => res.json())
-    .then(data => {
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+        if (!data || !Array.isArray(data.results)) {
+                throw new Error('Invalid API response format');
+        }
+
         if(Array.isArray(data.results)){
             // We are only interested in results the required fields are filled.
             data.results = data.results.filter(movie =>
@@ -140,10 +173,11 @@ export function searchMovies(query){
         }
         return data;
     })
-    .catch(err => {
-      console.error(err);
-      throw err;
+    .catch(error => {
+            console.error('Error in searchMovies:', error);
+            throw new Error(`Search failed: ${error.message}`);
     });
+    
 }
 
 
@@ -163,8 +197,16 @@ export function getMovieDetails(id){
       const url = `https://api.themoviedb.org/3/movie/${id}` +
       '?append_to_response=credits';
       return fetch(url, options)
-        .then(res => res.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(res => {
+            if (!res || !res.credits) {
+                throw new Error('Invalid movie details format');
+            }
             
             const details = res;
             const credits = res.credits; 
@@ -197,37 +239,12 @@ export function getMovieDetails(id){
              }
 
         } )
-        .catch(err => console.error(err));
+        .catch(error => {
+            console.error('Error in getMovieDetails:', error);
+            throw new Error(`Failed to fetch movie details: ${error.message}`);
+        });
 }
 
 
 
 
-/**
- * Need to fetch the genre list. 
- * 
- */
-let genreMap = null; 
-export function fetchGenreMap(){
-    const options = {
-        method: 'GET',
-     headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NmM4Y2ZlNmIxMWIyMzVlMzRiMjk1YjU2YmJmZGRmOCIsIm5iZiI6MTc0MzE2NTA3Ni4xNzkwMDAxLCJzdWIiOiI2N2U2OTY5NDE0YmJhNmFlMzEwMDJmMGMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.VEYRiCzXDO6rLqMKpPCQF8X1TIsaO8k5MdVqf6IyT1A'
-    }
-    };
-    
-
-    return fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
-        .then(res => res.json())
-        .then(res  => {
-            // genres is an array of objects.s
-            genreMap = res.genres.reduce((map, g) => {
-                map[g.id] = g.name; 
-                return map;
-            }, {})
-            return genreMap;
-
-        })
-        .catch(err => console.error(err));
-}

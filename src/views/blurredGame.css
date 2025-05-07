@@ -1,0 +1,38 @@
+.blurred-game-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    text-align: center;
+  }
+  
+  .poster-wrapper {
+    position: relative;
+    width: 100%;
+    /* preserve full 2:3 aspect ratio without cropping */
+    padding-top: 150%;
+    overflow: hidden;
+  }
+  
+  .poster-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.3s ease, clip-path 0.3s ease;
+  }
+  
+  .poster-img.blurred {
+    filter: blur(40px);
+  }
+  
+  .search-bar-section {
+    margin-top: 1.5rem; /* ensure it's fully below the poster */
+  }
+  
+  .win-text {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  

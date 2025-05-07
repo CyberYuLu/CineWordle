@@ -24,7 +24,7 @@ const SearchBar = observer(function SearchBar(props) {
   }
   
   // Create a debounced version of performSearch
-  const debouncedSearch = debounce(performSearch, 200);
+  const debouncedSearch = debounce(performSearch, 1000);
   
   // Callback for when the query changes.
   function handleQueryChange(event) {
@@ -64,6 +64,10 @@ const SearchBar = observer(function SearchBar(props) {
           setNotification(isCorrect ? "Correct guess!" : `"${movieDetails.title}" has been added!`);
   
           setTimeout(() => setNotification(""), 3000);
+
+          // Change to remove the text.
+          model.setSearchQuery("");
+          model.setCurrentGuess(null);
         })
         .catch(err => {
           console.error(err);
@@ -75,13 +79,21 @@ const SearchBar = observer(function SearchBar(props) {
       setIsCorrect(false);
     }
   }
-  
+
+  // Suspenseview.
+  const isLoading = !props.model.searchResultsPromiseState.data;
   let suggestions = props.model.searchResultsPromiseState.data?.results || [];
   let query = props.model.searchStr|| "";
   
+
+  /**
+   * Possibly not the best solution. Need to adjust so so drop down results has their own presenter as in the lab.
+   * 
+   */
   return (
     <SearchBarView
       query={query}
+      isLoading={isLoading}
       suggestions={suggestions}
       onQueryChange={handleQueryChange}
       onSuggestionSelect={handleSuggestionSelect}

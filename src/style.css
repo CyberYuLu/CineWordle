@@ -50,7 +50,7 @@
     width: 150px; /* Adjust cell width */
   }
 
-  .numerical-container {
+  .year-container {
     display: flex;
     flex-direction: row;
     align-items: center;

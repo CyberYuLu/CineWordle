@@ -7,7 +7,7 @@ import { createRegisterPresenter } from "./registerPresenter.jsx";
 import { TutorialPresenter } from "./tutorialPresenter.jsx";
 import { ProfilePresenter } from "./profilePresenter.jsx";
 import { LeaderboardPresenter } from "./leaderboardPresenter.jsx";
-
+import {BlurredGame} from "./blurredGamePresenter.jsx"
 
 function LoginWrapper({ model }) {
     const Login = createLoginPresenter(model);
@@ -28,6 +28,8 @@ function makeRouter(model) {
         { path: "/how-to-play", element: <TutorialPresenter model={model} /> },
         { path: "/profile", element: <ProfilePresenter model={model} /> },
         { path: "/leaderboard", element: <LeaderboardPresenter model={model} /> },
+        {/** If we want to to include the other game */}, 
+        {path: "/blurredGame", element: <BlurredGame model={model} maxAttempts={10} mode={'blur-level'}/> }
   ]);
 }
 
