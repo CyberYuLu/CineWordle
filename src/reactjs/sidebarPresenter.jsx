@@ -8,6 +8,8 @@ const Sidebar = observer(function SidebarRender(props) {
         try {
             await signOut(auth);
             props.model.currentUser = null;
+
+            
         } catch (error) {
             console.error("Error signing out:", error);
         }

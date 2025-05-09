@@ -9,8 +9,8 @@ export function MainView(props) {
     return (
         <div style={{ textAlign: "center", padding: "20px" }}>
             <h1>Movie Wordle</h1>
-            <p>Guess the movie!</p>
-            <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "20px" }}>
+            <h5>Guess the movie of the day!</h5>
+            <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "20px"  }}>
                 <button
 
                     className="buttonStyle"

@@ -31,6 +31,7 @@ onAuthStateChanged(auth, (user) => {
   } else {
     // No user is signed in; clear the current user from your model.
     reactiveModel.currentUser = null;
+    
   }
 });
 
@@ -50,7 +51,7 @@ reaction(ifFirstHintACB, triggerFirstHintACB);
 reaction(ifSecondHintACB, triggerSecondHintACB);
 
 function ifTooMuchGuessACB(){
-    if (reactiveModel.guesses.length >= reactiveModel.guessForLoose) 
+    if (reactiveModel && reactiveModel.guesses.length >= reactiveModel.guessForLoose) 
       {
         
         return true;}
@@ -62,7 +63,7 @@ function triggerLooseACB(){
 }
 
 function isCorrectGuessACB() {
-    if (reactiveModel.guesses.length > 0) {
+    if (reactiveModel && reactiveModel.guesses.length > 0) {
         const lastGuess = reactiveModel.guesses[reactiveModel.guesses.length - 1];
         return lastGuess.id === reactiveModel.correctMovie.id;
     }
@@ -74,7 +75,7 @@ function triggerWinACB() {
     reactiveModel.setWin(true);}
 
 function ifFirstHintACB(){
-    if (reactiveModel.guesses.length >= reactiveModel.guessForFirstHint) 
+    if (reactiveModel && reactiveModel.guesses.length >= reactiveModel.guessForFirstHint) 
         return true;
 }
 
@@ -85,7 +86,7 @@ function triggerFirstHintACB()
 }
 
 function ifSecondHintACB(){
-    if (reactiveModel.guesses.length >= reactiveModel.guessForSecondHint) 
+    if (reactiveModel && reactiveModel.guesses.length >= reactiveModel.guessForSecondHint) 
         return true;
 }
 

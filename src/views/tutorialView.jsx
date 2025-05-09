@@ -47,7 +47,7 @@ export default function TutorialView() {
                 </span>
               </div>
               <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
-                <span style={{ backgroundColor: "gray", color: "white", padding: "6px 10px", borderRadius: "4px" }}>
+                <span style={{ backgroundColor: "red", color: "white", padding: "6px 10px", borderRadius: "4px" }}>
                   ⬛ Not in the target movie
                 </span>
               </div>

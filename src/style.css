@@ -2,7 +2,7 @@
     border-radius: 50%;
     width: 70px;
     height: 70px;
-    background-color: #4CAF50;
+    background-color: green;
     color: white;
     font-size: 14px;
     cursor: pointer;
@@ -32,6 +32,49 @@
   
   .guess-header, .guess-row {
     text-align: center;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .new-row .guess-cell,
+  .new-row .guess-cell_image {
+    animation: fadeInUp 0.5s ease both;
+  }
+  
+  /* Optional staggered animation delay */
+  .new-row .guess-cell:nth-child(1),
+  .new-row .guess-cell_image {
+    animation-delay: 0s;
+  }
+  .new-row .guess-cell:nth-child(2) {
+    animation-delay: 0.05s;
+  }
+  .new-row .guess-cell:nth-child(3) {
+    animation-delay: 0.1s;
+  }
+  .new-row .guess-cell:nth-child(4) {
+    animation-delay: 0.15s;
+  }
+  .new-row .guess-cell:nth-child(5) {
+    animation-delay: 0.2s;
+  }
+  .new-row .guess-cell:nth-child(6) {
+    animation-delay: 0.25s;
+  }
+  .new-row .guess-cell:nth-child(7) {
+    animation-delay: 0.3s;
+  }
+  .new-row .guess-cell:nth-child(8) {
+    animation-delay: 0.35s;
   }
   
 

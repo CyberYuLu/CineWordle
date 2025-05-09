@@ -15,8 +15,10 @@ export const MainGameView = observer((props) => {
 
   const genresTarget = props.targetMovie?.genres.map(g => ("" + g.name));
 
-  function displayGuessCB (guess)  
+  function displayGuessCB (guess, isNewest)  
   {
+
+    const rowClassName = `guess-header${isNewest ? " new-row" : ""}`; //the new row will have a different css class, basic class : "guess-header", new one : "new-row"
 
 
     const title = guess?.title || "No Data";
@@ -44,7 +46,7 @@ export const MainGameView = observer((props) => {
     const genreString = genres.join(", ");
 
     return (
-      <tr key={title} className="guess-header">
+      <tr key={title} className={rowClassName}>
         <td className="guess-cell_image">
           <img src={`https://image.tmdb.org/t/p/w300${guess.poster_path}`} alt={title} className="guess-image" />
         </td>
@@ -100,7 +102,7 @@ export const MainGameView = observer((props) => {
 
 
 
-      <h1 >Guesses</h1>
+      <h1 style={{ textAlign: "center", padding: "20px" }}>Guesses</h1>
       <table className="guesses-container">
         <tbody>
           <tr className="guess-header">
@@ -113,7 +115,7 @@ export const MainGameView = observer((props) => {
             <th  className="guess-cell">Company</th>
             <th  className="guess-cell">Country</th>
           </tr>
-          {props.guesses.slice().reverse().map(displayGuessCB)}
+          {props.guesses.slice().reverse().map((guess, index) => displayGuessCB(guess, index === 0))}
         </tbody>
       </table>
     </div>

@@ -14,23 +14,19 @@ const Main = observer(
         //temporay function to simulate winning state
         function toggleWinACB() {
             props.model.setDisplayWinningScreen(true);
-            console.log("Toggling win state" + win);
         };
 
         function disableWinningScreanACB(){
             props.model.setDisplayWinningScreen(false);
-            console.log("Toggling win state" + win);
         };
 
         //same for loosing stage 
         function toggleloseACB() {
             props.model.setDisplayLoosingScreen(true);
-            console.log("Toggling lose state" + lose);
         };
 
         function disableLosingScreanACB(){
             props.model.setDisplayLoosingScreen(false);
-            console.log("Toggling lose state" + lose);
         };
 
 
