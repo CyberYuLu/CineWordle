@@ -1,32 +1,20 @@
-import React, { useState } from "react";
+// src/views/LoginView.jsx
+import React from "react";
 import '../styles/auth.css';
 
-export function LoginView({ signIn }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-
-    async function handleSubmitACB(e) {
-        e.preventDefault();
-        setErrorMessage('');
-        setSuccessMessage('');
-        setLoading(true);
-
-        try {
-            await signIn(email, password);
-            setSuccessMessage('Sign in successful!');
-        } catch (error) {
-            setErrorMessage(`Sign in failed: ${error.message}`);
-        } finally {
-            setLoading(false);
-        }
-    };
-
+export function LoginView({
+    email,
+    password,
+    loading,
+    errorMessage,
+    successMessage,
+    setEmail,
+    setPassword,
+    handleSubmit
+}) {
     return (
         <div className="auth-container">
-            <form onSubmit={handleSubmitACB} className="auth-form">
+            <form onSubmit={handleSubmit} className="auth-form">
                 <h2>Login</h2>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
@@ -55,7 +43,7 @@ export function LoginView({ signIn }) {
                 <button className="auth-button" type="submit" disabled={loading}>
                     {loading ? 'Signing in...' : 'Sign In'}
                 </button>
-                <hr/>
+                <hr />
                 <p>Don't have an account? <a href="#/register">Sign up</a></p>
             </form>
         </div>

@@ -1,33 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../styles/auth.css';
 
-export function RegisterView({ register }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-
-    async function handleSubmitACB(e) {
-        e.preventDefault();
-        setLoading(true);
-        setErrorMessage('');
-        setSuccessMessage('');
-
-        try {
-            await register(email, password);
-            setSuccessMessage('Registration successful!');
-        } catch (error) {
-            setErrorMessage(`Registration failed: ${error.message}`);
-        } finally {
-            setLoading(false);
-        }
-    };
-
+export function RegisterView({
+    email,
+    password,
+    loading,
+    errorMessage,
+    successMessage,
+    setEmail,
+    setPassword,
+    handleSubmit
+}) {
     return (
-        
         <div className="auth-container">
-            <form onSubmit={handleSubmitACB} className="auth-form">
+            <form onSubmit={handleSubmit} className="auth-form">
                 <h2>Register</h2>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
@@ -56,7 +42,7 @@ export function RegisterView({ register }) {
                 <button className="auth-button" type="submit" disabled={loading}>
                     {loading ? 'Registering...' : 'Register'}
                 </button>
-                <hr/>
+                <hr />
                 <p>Already have an account? <a href="#/login">Login</a></p>
             </form>
         </div>
