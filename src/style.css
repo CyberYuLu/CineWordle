@@ -210,6 +210,12 @@
     text-align: center;
 }
 
+.movie-description {
+    max-width: 600px; 
+    text-align: center; 
+    word-wrap: break-word; 
+}
+
 .hints-container {
   margin-top: 20px;
   padding: 10px;

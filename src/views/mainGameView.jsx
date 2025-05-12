@@ -115,7 +115,7 @@ export const MainGameView = observer((props) => {
             <th  className="guess-cell">Company</th>
             <th  className="guess-cell">Country</th>
           </tr>
-          {props.guesses.slice().reverse().map((guess, index) => displayGuessCB(guess, index === 0))}
+          {props.guesses && props.guesses.slice().reverse().map((guess, index) => displayGuessCB(guess, index === 0))}
         </tbody>
       </table>
     </div>

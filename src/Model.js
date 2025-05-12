@@ -3,7 +3,7 @@
 // Should probably have on model for everything. T
 import { resolvePromise } from "./resolvePromise";
 import {getExpectedMovieID, getMovieDetails, searchMovies} from "./fetchData"
-import { makeAutoObservable, runInAction, set} from "mobx";
+import { makeAutoObservable, runInAction, set, reaction} from "mobx";
 
 export const model = {
     /**
@@ -178,4 +178,63 @@ export const model = {
 
 
 };
+
+makeAutoObservable(model);
+
+// -------------- WINNING MANAGEMENT + HINT MANAGEMENT -------------------------
+// handle winning and loosing with side effects.
+reaction(ifTooMuchGuessACB, triggerLooseACB);
+reaction(isCorrectGuessACB, triggerWinACB);
+reaction(ifFirstHintACB, triggerFirstHintACB);
+reaction(ifSecondHintACB, triggerSecondHintACB);
+
+function ifTooMuchGuessACB(){
+    if (model && model.guesses && model.guesses.length >= model.guessForLoose) 
+      {
+        
+        return true;}
+};
+
+function triggerLooseACB(){
+    console.log("Too much guess, triggering loose")
+    model.setLoose(true);
+}
+
+function isCorrectGuessACB() {
+    if (model && model.guesses &&  model.guesses.length > 0) {
+        const lastGuess = model.guesses[model.guesses.length - 1];
+        return lastGuess.id === model.correctMovie.id;
+    }
+    return false;
+}
+
+function triggerWinACB() {
+    console.log("Correct guess, triggering win")
+    model.setWin(true);}
+
+function ifFirstHintACB(){
+    if (model && model.guesses && model.guesses.length >= model.guessForFirstHint) 
+        return true;
+}
+
+function triggerFirstHintACB()
+{
+    model.setFirstHint(true);
+    console.log("First hint triggered")
+}
+
+function ifSecondHintACB(){
+    if (model &&  model.guesses && model.guesses.length >= model.guessForSecondHint) 
+        return true;
+}
+
+function triggerSecondHintACB()
+{
+    model.setSecondHint(true);
+    console.log("Second hint triggered")
+}
+
+// ------------------ END OF WINNING MANAGEMENT + HINT MANAGEMENT -------------------------
+
+
 

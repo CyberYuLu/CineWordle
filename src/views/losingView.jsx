@@ -15,11 +15,11 @@ export const LosingView = observer((props) => {
     return (
         <div className="winning-view">
             <h1>Game Over 😞</h1>
-            <p>Sorry, you couldn't guess the correct movie.</p>
+            <p >Sorry, you couldn't guess the correct movie.</p>
 
             <div className="movie-details">
                 <h2>The correct answer was: {movie.name}</h2>
-                <p>{movie.description}</p>
+                <p className="movie-description">{movie.description}</p>
                 <img src={`https://image.tmdb.org/t/p/w300${movie.image}`} alt={movie.name} />
             </div>
             <button onClick={props.onButtonClick}>Try Again</button>

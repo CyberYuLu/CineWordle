@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { RegisterView } from "/src/views/registerView.jsx";
+import { useNavigate } from "react-router-dom";
 
 class RegisterPresenter {
     constructor(model) {
@@ -25,10 +26,20 @@ function createRegisterPresenter(model) {
     const presenter = new RegisterPresenter(model);
 
     const Register = observer(function RegisterRender() {
-        return <RegisterView register={presenter.register} />;
+        const navigate = useNavigate(); // Initialize the navigate function
+
+        async function handleRegister(email, password) {
+            try {
+                await presenter.register(email, password);
+                navigate("/game"); // Redirect to the main menu/game
+            } catch (error) {
+                console.error("Registration failed:", error);
+            }
+        }
+
+        return <RegisterView register={handleRegister} />;
     });
 
     return Register;
 }
-
 export { createRegisterPresenter };
