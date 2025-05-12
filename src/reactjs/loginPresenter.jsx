@@ -62,5 +62,4 @@ function createLoginPresenter(model) {
 
     return Login;
 }
-
 export { createLoginPresenter };

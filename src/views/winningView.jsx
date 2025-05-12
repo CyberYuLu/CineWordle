@@ -14,11 +14,11 @@ export const WinningView = observer((props) => {
     return (
         <div className="winning-view">
             <h1>Congratulations! 🎉</h1>
-            <p>The correct movie was guessed in {numberOfGuesses} guesses!</p>
+            <p c>The correct movie was guessed in {numberOfGuesses} guesses!</p>
 
             <div className="movie-details">
                 <h2>{movie.name}</h2>
-                <p>{movie.description}</p>
+                <p className="movie-description">{movie.description}</p>
                 <img src={`https://image.tmdb.org/t/p/w300${movie.image}`} alt={movie.name} />
             </div>
             <button onClick={props.onButtonClick}>Exit !</button>

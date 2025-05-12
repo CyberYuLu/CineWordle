@@ -62,5 +62,4 @@ function createRegisterPresenter(model) {
 
     return Register;
 }
-
 export { createRegisterPresenter };
