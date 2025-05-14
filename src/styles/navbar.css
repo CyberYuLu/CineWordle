@@ -2,28 +2,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #00a2ff;
+  background-color: #e2b54c;
   color: white;
   padding: 0.75rem 1.5rem;
   flex-wrap: wrap;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.navbar button {
-  background-color: transparent;
-  border: 1px solid #fff;
-  color: white;
-  padding: 0.5rem 0.9rem;
-  border-radius: 6px;
-  margin-left: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.3s, border-color 0.3s;
-}
 
-.navbar button:hover {
-  background-color: #ffffff22;
-  border-color: #aaa;
-}
 
 .navbar-left,
 .navbar-right {

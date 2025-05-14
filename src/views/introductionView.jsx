@@ -1,33 +1,41 @@
+import React from "react";
+import { TutorialContent } from "./TutorialContent"; // Ensure this component is properly defined
+import "/src/styles/intro.css";
+import "/src/styles/general.css";
+
 
 
 export function IntroductionView({ onNavigateToMainMenu }) {
-    return (
-        <div className="introduction-container">
-            <h1>Welcome to Movie Wordle!</h1>
-            <p>
-                Movie Wordle is an interactive game where you guess the movie of the day based on hints and clues. 
-                Compete with friends, climb the leaderboard, and test your movie knowledge!
-            </p>
-            <p>
-                Explore features like:
-                <ul>
-                    <li>Daily movie challenges</li>
-                    <li>Hints to guide your guesses</li>
-                    <li>Leaderboards to track your progress</li>
-                </ul>
-            </p>
-            <p>Good luck and have fun!</p>
+  return (
+    <div className="intro-container">
+      <section className="intro-hero">
+        <h1 className="intro-title">🎬 Welcome to Movie Wordle</h1>
+        <p className="intro-subtitle">
+          Test your film knowledge by guessing the movie of the day using hints and clues. Compete with friends, climb the leaderboard, and become the ultimate cinephile!
+        </p>
 
-            {/* Button to navigate to the main menu */}
-            <button onClick={onNavigateToMainMenu} className="buttonStyle">
-                Go to Main Menu
+        <div className="intro-grid">
+          <div className="intro-features">
+            <h2>✨ Features</h2>
+            <ul>
+              <li>📅 Daily movie puzzles to solve</li>
+              <li>💡 Contextual hints to help you guess</li>
+              <li>🏆 Leaderboard to track your ranking</li>
+              <li>🎯 Limited attempts for added challenge</li>
+            </ul>
+          </div>
+          <div className="intro-action">
+            <button onClick={onNavigateToMainMenu} style={{ width: '200px', height: '80', fontSize: '20px'}}>
+              Start Playing
             </button>
-
-            {/* Frame for the TutorialView */}
-            <div className="tutorial-frame">
-                <h2>How to Play</h2>
-                
-            </div>
+          </div>
         </div>
-    );
+
+        <section className="tutorial-section">
+          <h2>🎥 How to Play</h2>
+          <TutorialContent />
+        </section>
+      </section>
+    </div>
+  );
 }

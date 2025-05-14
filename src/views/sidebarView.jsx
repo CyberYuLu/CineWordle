@@ -1,4 +1,6 @@
 import '../styles/navbar.css';
+import '../styles/general.css';
+
 
 
 export function SidebarView(props) {
@@ -11,7 +13,7 @@ export function SidebarView(props) {
                         <img
                             src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
                             alt="GitHub"
-                            style={{ width: '32px', height: '32px', borderRadius: '50%' }}
+                            style={{ width: '40px', height: '40px', borderRadius: '50%' }}
                         />
                 </button>
                 <button onClick={handleUserMainClickACB}>Main Menu</button>

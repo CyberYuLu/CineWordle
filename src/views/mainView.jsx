@@ -1,5 +1,7 @@
 
 import "/src/style.css"
+import '../styles/general.css';
+
 import TutorialView from "./tutorialView";
 
 
@@ -13,7 +15,7 @@ export function MainView(props) {
             <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "20px"  }}>
                 <button
 
-                    className="buttonStyle"
+     
                     onClick={() => console.log("Current Streak clicked")}
 
                 >
@@ -21,14 +23,12 @@ export function MainView(props) {
                 </button>
                 <button
                     onClick={() => console.log("User Data clicked")}
-                    className="buttonStyle"
                 >
                     User Data
                 </button>
                 
                 <button
                     type="button"
-                    className="btn btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#howToPlayModal"
                 >

@@ -52,7 +52,7 @@ export const MainGameView = observer((props) => {
         </td>
         <td className={`guess-cell ${nameCorrect ? "correct" : "incorrect"}`}>{title}</td>
         <td className={`guess-cell ${yearCorrect ? "correct" : "incorrect"}`}>
-          <div className="numerical-container">
+          <div >
             <span>{releaseYear}</span>
             {!yearCorrect && (
               <span>
@@ -71,7 +71,7 @@ export const MainGameView = observer((props) => {
         </td>
         <td className={`guess-cell ${genreCorrect ? "correct" : genreMatch ? "partial" : "incorrect"}`}>{genreString}</td>
         <td className={`guess-cell ${budgetCorrect ? "correct" : "incorrect"}`}>
-          <div className="numerical-container">
+          <div >
             <span>{budget.toLocaleString("fr-FR")}</span>
             {!budgetCorrect && (
               <span>

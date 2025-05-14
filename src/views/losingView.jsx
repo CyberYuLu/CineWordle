@@ -14,7 +14,7 @@ export const LosingView = observer((props) => {
 
     return (
         <div className="winning-view">
-            <h1>Game Over 😞</h1>
+            <h1 >Game Over 😞</h1>
             <p >Sorry, you couldn't guess the correct movie.</p>
 
             <div className="movie-details">
