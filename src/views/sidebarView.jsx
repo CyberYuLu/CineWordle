@@ -7,8 +7,16 @@ export function SidebarView(props) {
     return (
         <nav className="navbar">
             <div className="navbar-left">
+                <button onClick={handleGitHubRedirectClickACB }     style={{ background: 'none', border: 'none'  }}>
+                        <img
+                            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                            alt="GitHub"
+                            style={{ width: '32px', height: '32px', borderRadius: '50%' }}
+                        />
+                </button>
                 <button onClick={handleUserMainClickACB}>Main Menu</button>
                 <button onClick={handleUserLeaderboardClickACB}>Leaderboard</button>
+                
             </div>
             <div className="navbar-right">
                 {user ? (
@@ -45,5 +53,9 @@ export function SidebarView(props) {
 
     function handleUserProfileClickACB(evt) {
         window.location.hash = "#/profile";
+    }
+
+    function handleGitHubRedirectClickACB(evt) {
+        window.open("https://gits-15.sys.kth.se/iprog-students/boabdlc-lovego-tmelm-yul7-vt25-Project", "_blank");
     }
 }
