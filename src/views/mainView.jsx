@@ -21,11 +21,7 @@ export function MainView(props) {
                 >
                     Current Streak
                 </button>
-                <button
-                    onClick={() => console.log("User Data clicked")}
-                >
-                    User Data
-                </button>
+                
                 
                 <button
                     type="button"
