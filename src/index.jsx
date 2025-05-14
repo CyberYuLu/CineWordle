@@ -1,5 +1,4 @@
 // TODO make a reactive model, set it to window.myModel
-import { auth} from "./firebase";
 import {createRoot} from "react-dom/client";
 import { observable, reaction } from "mobx";
 import { fetchUserData, fetchChallengeData, recordGuess} from "./firebase";
@@ -12,7 +11,7 @@ configure({ enforceActions: "never" });
 
 
 import {model} from "/src/Model.js"
-const reactiveModel= observable(model);
+export const reactiveModel= observable(model);
 
 //import hardcodeData from "/hardcodeData.json";
 //reactiveModel.correctMovie = hardcodeData.targetMovie;

@@ -3,6 +3,7 @@ import { getAnalytics, setCurrentScreen } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getExpectedMovieID } from "./fetchData";
 import { onAuthStateChanged } from "firebase/auth";
+import { reactiveModel } from ".";
 
 const firebaseConfig = {
 
@@ -50,7 +51,6 @@ onAuthStateChanged(auth, (user) => {
   } else {
     // No user is signed in; clear the current user from your model.
     reactiveModel.currentUser = null;
-    
   }
 });
 
