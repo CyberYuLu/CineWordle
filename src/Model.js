@@ -4,7 +4,7 @@
 import { resolvePromise } from "./resolvePromise";
 import {getExpectedMovieID, getMovieDetails, searchMovies} from "./fetchData"
 import { makeAutoObservable, runInAction, set, reaction} from "mobx";
-import { updateLeaderboard } from "./firebase";
+import { updateLeaderboard, updateUserStreak, updateDailyResult } from "./firebase";
 
 export const model = {
     /**
@@ -211,6 +211,7 @@ function ifTooMuchGuessACB(){
 function triggerLooseACB(){
     console.log("Too much guess, triggering loose")
     model.setLoose(true);
+    
 }
 
 function isCorrectGuessACB() {
@@ -224,6 +225,7 @@ function isCorrectGuessACB() {
 function triggerWinACB() {
     console.log("Correct guess, triggering win")
     model.setWin(true);
+    
 
     // Add the number of guesses to the leaderboard.
     // Maybe keep the challengeID in the model.

@@ -64,7 +64,7 @@ export function fetchUserData(user, reactiveModel){
                 // uid is the name of the field we get from firebase
                 uid: user.uid,
                 email: user.email,
-                statistics: {}, 
+                statistics: {streak : 0}, 
             }
             // We create a new 
             setDoc(userDocRef,dataForCloud,{merge: true})
@@ -82,7 +82,9 @@ export function fetchUserData(user, reactiveModel){
     function handleGuesses(guessesSnapShot){
         if(!guessesSnapShot.exists()){
             let letGuessData = {
-                guess: []
+                guess: [],
+                win: false,
+                loose: false 
             }
             setDoc(guessDocRef, letGuessData); 
         }
@@ -90,21 +92,36 @@ export function fetchUserData(user, reactiveModel){
     }
     onSnapshot(guessDocRef, handleGuessSnapshot);
     function handleGuessSnapshot(snap){
-        const data = snap.exists() ? snap.data() : { guesses: [] };
+        const data = snap.exists()
+        ? snap.data() : { guess: [], win: false, loose: false };
+
         reactiveModel.guess  = data.guess; 
         reactiveModel.guesses  = data.guess; 
+        reactiveModel.win = data.win;
+        reactiveModel.loose = data.loose;
 
     }
 
 
 }
 
-/**
- *  TODO. A function for changing the attributes for an user. Do not know which users yet though. 
- * 
- *  */ 
+export function updateUserStreak(userID, newStreak) {
+  const ref = doc(db, USERCOLLECTION, userID);
+  return updateDoc(ref, { "statistics.streak": newStreak })
+    .then(() => console.log(`streak updated to ${newStreak}`))
+    .catch(err => console.error("Error updating streak:", err));
+}
 
-/**
+export function updateDailyResult(userID, { win, loose }) {
+  const ref = doc(db, USERCOLLECTION, userID, GUESSES, todayID());
+  return updateDoc(ref, { win, loose })
+    .then(() => console.log(`daily result updated (win:${win}, loose:${loose})`))
+    .catch(err => console.error("Error updating daily result:", err));
+}
+
+
+
+/** 
  * Function for updating the guesses in the USERCOLLECTION. We will either need separate functions for changing the current challenge when the day changes and 
  * also need methods for changing the statistics.
  */
