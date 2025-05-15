@@ -75,7 +75,7 @@ export const MainGameView = observer((props) => {
             <span>{budget.toLocaleString("fr-FR")}</span>
             {!budgetCorrect && (
               <span>
-                {budget > targetBudget ? (
+                {budget < targetBudget ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" fill="black" viewBox="0 0 24 24">
                     <path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="black" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
