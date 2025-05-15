@@ -1,22 +1,22 @@
 
+// src/reactjs/introductionPresenter.jsx
 import { observer } from "mobx-react-lite";
-import { IntroductionView } from "../views/introductionView";
-
+import { IntroductionView } from "../views/introductionView.jsx";
 import { useNavigate } from "react-router-dom";
 
-export const Introduction = observer(function IntroductionPresenter() {
-    const navigate = useNavigate();
+export const Introduction = observer(function IntroductionPresenter({ model }) {
+  const navigate = useNavigate();
 
+ 
 
-    function clickButtonACB() {
-        navigate("/game");
+  function goDaily() {
+    navigate(model.currentUser ? "/game" : "/login");
   }
 
-    return (
-        <div>
-        <IntroductionView
-            onNavigateToMainMenu={clickButtonACB}
-        />
-        </div>
-    );
+  return (
+    <IntroductionView
+      onDaily={goDaily}
+      user={model.currentUser}
+    />
+  );
 });

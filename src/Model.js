@@ -4,6 +4,7 @@
 import { resolvePromise } from "./resolvePromise";
 import {getExpectedMovieID, getMovieDetails, searchMovies} from "./fetchData"
 import { makeAutoObservable, runInAction, set, reaction} from "mobx";
+import { updateLeaderboard } from "./firebase";
 
 export const model = {
     /**
@@ -27,7 +28,7 @@ export const model = {
     // Parameters for filtering which movies we can select from..
     popular: true,
     
-
+    authInitialized: false,
     
     // currentGuess is the id.
     currentGuessID: null, 
@@ -176,7 +177,7 @@ export const model = {
 
     getYear(dateString) {
         return dateString ? `(${new Date(dateString).getFullYear()})` : '';
-    }
+    },
 
 
 
@@ -185,10 +186,13 @@ export const model = {
        * 
        */
 
+      
+
+
+
 
 };
 
-makeAutoObservable(model);
 
 // -------------- WINNING MANAGEMENT + HINT MANAGEMENT -------------------------
 // handle winning and loosing with side effects.
@@ -219,7 +223,22 @@ function isCorrectGuessACB() {
 
 function triggerWinACB() {
     console.log("Correct guess, triggering win")
-    model.setWin(true);}
+    model.setWin(true);
+
+    // Add the number of guesses to the leaderboard.
+    // Maybe keep the challengeID in the model.
+    if (model.currentUser) { 
+        const newEntry = {
+            uid: model.currentUser.uid,
+            name: model.currentUser.displayName,
+            score: model.guesses.length,
+            timestamp: Date.now(),
+        };
+        const date = new Date().toISOString().split("T")[0];
+        updateLeaderboard(date, newEntry) 
+    
+    }
+}
 
 function ifFirstHintACB(){
     if (model && model.guesses && model.guesses.length >= model.guessForFirstHint) 
@@ -245,5 +264,6 @@ function triggerSecondHintACB()
 
 // ------------------ END OF WINNING MANAGEMENT + HINT MANAGEMENT -------------------------
 
+//------------------ Handle solo play -------------------------
 
 

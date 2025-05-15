@@ -2,6 +2,7 @@
 import {createRoot} from "react-dom/client";
 import { observable, reaction } from "mobx";
 import { fetchUserData, fetchChallengeData, recordGuess} from "./firebase";
+import { initAuth } from "./initAuth";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -18,7 +19,9 @@ export const reactiveModel= observable(model);
 //reactiveModel.guesses = hardcodeData.guesses; 
 
 // It keeps track of todays date. 
-fetchChallengeData(reactiveModel); 
+initAuth(reactiveModel);
+fetchChallengeData(reactiveModel);
+
 
 import { ReactRoot } from "/src/reactjs/ReactRoot.jsx";
 const rootJSX = <ReactRoot model={reactiveModel} />

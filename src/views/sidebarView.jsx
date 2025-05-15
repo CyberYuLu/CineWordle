@@ -50,7 +50,7 @@ export function SidebarView(props) {
     }
 
     function handleUserMainClickACB(evt) {
-        window.location.hash = "#/game";
+        window.location.hash = "#/intro";
     }
 
     function handleUserProfileClickACB(evt) {

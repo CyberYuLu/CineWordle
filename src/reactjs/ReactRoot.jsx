@@ -9,6 +9,7 @@ import { TutorialPresenter } from "./tutorialPresenter.jsx";
 import { ProfilePresenter } from "./profilePresenter.jsx";
 import { LeaderboardPresenter } from "./leaderboardPresenter.jsx";
 import {BlurredGame} from "./blurredGamePresenter.jsx"
+import { SuspenseView } from "../views/suspenseView.jsx";
 
 function LoginWrapper({ model }) {
     const Login = createLoginPresenter(model);
@@ -37,6 +38,11 @@ function makeRouter(model) {
 
 const ReactRoot = observer(  
     function ReactRoot(props){
+        if(!props.model.authInitialized){
+            return <SuspenseView/>
+        }
+
+    
         return (
             <div className="flexParent">
                 <div className="sidebar"><Sidebar model={props.model} /></div>

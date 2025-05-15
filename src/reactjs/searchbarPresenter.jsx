@@ -56,8 +56,9 @@ const SearchBar = observer(function SearchBar(props) {
       getMovieDetails(model.currentGuess)
         .then(movieDetails => {
           console.log("Got details:", movieDetails);
+          
           recordGuess(model.currentUser.uid, movieDetails);
-          model.addGuessForUser(movieDetails); // Don't forget this if needed!
+          model.addGuessForUser(movieDetails); 
   
           const isCorrect = movieDetails.title === model.correctMovie.title;
           setIsCorrect(isCorrect);

@@ -13,23 +13,21 @@ export function LeaderboardView({ leaderBoard }) {
                         <th>Score</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {leaderBoard?.length > 0 ? (
-                        leaderBoard
-                            .sort((a, b) => b.score - a.score)
-                            .map((entry, index) => (
-                                <tr key={entry.uid}>
-                                    <td>{index + 1}</td>
-                                    <td>{entry.name || entry.email || "Anonymous"}</td>
-                                    <td>{entry.score}</td>
+                        <tbody>
+                        {leaderBoard?.length > 0 ? (
+                            leaderBoard
+                            .sort((a,b) => a.score - b.score) // fewer guesses is “better”
+                            .map((entry, i) => (
+                                <tr key={entry.uid + entry.timestamp}>
+                                <td>{i+1}</td>
+                                <td>{entry.name}</td>
+                                <td>{entry.score}</td>
                                 </tr>
                             ))
-                    ) : (
-                        <tr>
-                            <td colSpan="3" className="empty-message">No entries yet.</td>
-                        </tr>
-                    )}
-                </tbody>
+                        ) : (
+                            <tr><td colSpan="3">No entries yet.</td></tr>
+                        )}
+                        </tbody>
             </table>
         </div>
     );

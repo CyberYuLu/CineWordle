@@ -5,7 +5,7 @@ import "/src/styles/general.css";
 
 
 
-export function IntroductionView({ onNavigateToMainMenu }) {
+export function IntroductionView({ onSolo, onDaily, user }) {
   return (
     <div className="intro-container">
       <section className="intro-hero">
@@ -25,9 +25,15 @@ export function IntroductionView({ onNavigateToMainMenu }) {
             </ul>
           </div>
           <div className="intro-action">
-            <button onClick={onNavigateToMainMenu} style={{ width: '200px', height: '80', fontSize: '20px'}}>
-              Start Playing
-            </button>
+            
+              <button
+            onClick={onDaily}
+            disabled={!user}
+            title={!user ? "Log in to play today’s challenge" : undefined}
+            style={{ width: 200, height: 80, fontSize: 20, marginLeft: 20 }}
+          >
+            Daily Challenge
+          </button>
           </div>
         </div>
 

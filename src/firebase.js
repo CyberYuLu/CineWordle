@@ -43,16 +43,6 @@ const CHALLENGECOLLECTSION = "challenge"
 const GUESSES = "guesses"
 
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // We set these values here since
-    reactiveModel.currentUser = {userID: user.uid, email: user.email,};
-    fetchUserData(user, reactiveModel)
-  } else {
-    // No user is signed in; clear the current user from your model.
-    reactiveModel.currentUser = null;
-  }
-});
 
 // Utility to get YYYY-MM-DD
 function todayID() {
