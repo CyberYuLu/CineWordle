@@ -221,4 +221,4 @@ export function updateCorrectMovie(challengeID, correctMovie) {
 
 
 
-export { app, auth };
+export { app, auth, db };
