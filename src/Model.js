@@ -193,6 +193,8 @@ export const model = {
 
 };
 
+makeAutoObservable(model);
+
 
 // -------------- WINNING MANAGEMENT + HINT MANAGEMENT -------------------------
 // handle winning and loosing with side effects.
