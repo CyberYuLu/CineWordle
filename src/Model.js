@@ -60,6 +60,7 @@ export const model = {
       if(!this.win)
       {
         //to avoid to display the winning screen twice.
+        this.setStreak(this.streak + 1);
         this.displayWinningScreen = win;
       }
       this.win = win;
@@ -69,6 +70,7 @@ export const model = {
       if(!this.loose)
       {
         //to avoid to display the winning screen twice.
+        this.setStreak(0);
         this.displayLoosingScreen = loose;
       }
       this.loose = loose;
@@ -85,6 +87,13 @@ export const model = {
     },
     setSecondHint(display) { 
       this.secondHint = display;
+    },
+
+    // ------------------------- STREAK MANAGEMENT --------------------------
+    streak: 0,
+
+    setStreak(newStreak) {
+    this.streak = newStreak;
     },
 
     // ------------------------- MOVIE MANAGEMENT -------------------------

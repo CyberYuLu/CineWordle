@@ -3,6 +3,7 @@ import "/src/style.css"
 import '../styles/general.css';
 
 import TutorialView from "./tutorialView";
+import StreakView from "./streakView";
 
 
 export function MainView(props) {
@@ -14,9 +15,9 @@ export function MainView(props) {
             <h5>Guess the movie of the day!</h5>
             <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "20px"  }}>
                 <button
-
-     
-                    onClick={() => console.log("Current Streak clicked")}
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#streakModal"
 
                 >
                     Current Streak
@@ -33,6 +34,7 @@ export function MainView(props) {
             </div>
 
             <TutorialView />
+            <StreakView  model  = {props.model}/>
         </div>
     );
 };
