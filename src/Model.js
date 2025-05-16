@@ -63,7 +63,29 @@ export const model = {
         //to avoid to display the winning screen twice.
         this.setStreak(this.streak + 1);
         this.displayWinningScreen = win;
-        this.addEntryToLeaderboard();
+        // 1) write the win flag into the users/<uid>/guesses/<today> doc
+        updateDailyResult(this.currentUser.uid, { win: true, loose: false })
+        .catch(console.error);
+        console.log("Updating daily result with win", this.currentUser.uid)
+
+        const entry = {
+          uid: this.currentUser.uid,
+          name: this.currentUser.email,
+          score: this.guesses.length,
+          timestamp: Date.now(),
+        };
+
+        console.log("Entry to leaderboard", entry)
+
+        // Can get challengeID from the date.
+        let challengeID = new Date().toISOString().split("T")[0]
+        updateLeaderboard(challengeID, entry).catch(console.error);
+
+      // also update local leaderboard if you’re showing it immediately
+     //   this.addEntryToLeaderboard();
+        
+        // Update the local leaderboard
+        this.leaderBoard.push(entry)
       }
       this.win = win;
       
@@ -74,6 +96,12 @@ export const model = {
         //to avoid to display the winning screen twice.
         this.setStreak(0);
         this.displayLoosingScreen = loose;
+
+        // Update with lose. 
+        updateDailyResult(this.currentUser.uid, { win: false, loose: true })
+        console.log("Updating daily result with log", this.currentUser.uid)
+
+        .catch(console.error)
       }
       this.loose = loose;
     },
