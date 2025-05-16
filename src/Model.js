@@ -63,6 +63,7 @@ export const model = {
         //to avoid to display the winning screen twice.
         this.setStreak(this.streak + 1);
         this.displayWinningScreen = win;
+        this.addEntryToLeaderboard();
       }
       this.win = win;
       
@@ -95,6 +96,23 @@ export const model = {
 
     setStreak(newStreak) {
     this.streak = newStreak;
+    },
+
+    // ------------------------- LEADERBOARD MANAGEMENT -------------------------
+
+    addEntryToLeaderboard() {
+      const entry = {
+        uid: this.currentUser.uid,
+        name: this.currentUser.email,
+        score: this.guesses.length,
+        timestamp: Date.now(),
+      };
+      this.leaderBoard.push(entry);
+
+    },
+
+    resetLeaderboard() {
+      this.leaderBoard = [];
     },
 
     // ------------------------- MOVIE MANAGEMENT -------------------------
@@ -229,19 +247,7 @@ function triggerWinACB() {
     model.setWin(true);
     
 
-    // Add the number of guesses to the leaderboard.
-    // Maybe keep the challengeID in the model.
-    if (model.currentUser) { 
-        const newEntry = {
-            uid: model.currentUser.uid,
-            name: model.currentUser.displayName,
-            score: model.guesses.length,
-            timestamp: Date.now(),
-        };
-        const date = new Date().toISOString().split("T")[0];
-        updateLeaderboard(date, newEntry) 
-    
-    }
+
 }
 
 function ifFirstHintACB(){
