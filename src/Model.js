@@ -225,6 +225,30 @@ export const model = {
         return dateString ? `(${new Date(dateString).getFullYear()})` : '';
     },
 
+    resetModel() {
+        this.correctMovie = null;
+        this.currentUser = null;
+        this.leaderBoard = [];
+        this.guesses = [];
+        this.popular = true;
+        this.authInitialized = false;
+        this.currentGuessID = null;
+        this.searchStr = null;
+        this.searchResultsPromiseState = {
+          data: { results: [] },
+          error: null,
+          promise: null,
+        };
+        this.currentMoviePromiseState = {};
+        this.win = false;
+        this.loose = false;
+        this.displayLoosingScreen = false;
+        this.displayWinningScreen = false;
+        this.guessForFirstHint = 3; 
+        this.guessForSecondHint = 5;
+        this.guessForLoose = 7;
+      }
+
 
 
       /**
