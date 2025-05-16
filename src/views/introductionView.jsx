@@ -32,7 +32,7 @@ export function IntroductionView({ onSolo, onDaily, user }) {
             title={!user ? "Log in to play today’s challenge" : undefined}
             style={{ width: 200, height: 80, fontSize: 20, marginLeft: 20 }}
           >
-            Daily Challenge
+            {!user ? "Log in to play" : "Daily Challenge"}
           </button>
           </div>
         </div>
