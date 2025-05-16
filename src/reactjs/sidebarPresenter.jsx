@@ -3,11 +3,13 @@ import { SidebarView } from "/src/views/sidebarView.jsx";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
+
 const Sidebar = observer(function SidebarRender(props) {
     async function handleSignOut() {
         try {
             await signOut(auth);
-            props.model.currentUser = null;
+            //props.model.currentUser = null;
+            props.model.resetModel();
 
             
         } catch (error) {

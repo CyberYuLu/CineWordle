@@ -226,12 +226,11 @@ export const model = {
     },
 
     resetModel() {
-        this.correctMovie = null;
         this.currentUser = null;
         this.leaderBoard = [];
         this.guesses = [];
         this.popular = true;
-        this.authInitialized = false;
+        this.authInitialized = true;
         this.currentGuessID = null;
         this.searchStr = null;
         this.searchResultsPromiseState = {
