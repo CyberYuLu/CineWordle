@@ -51,6 +51,15 @@ const SearchBar = observer(function SearchBar(props) {
    */
 
   function clickButtonACB() {
+
+    if (model.guesses.some(g => g.id === model.currentGuess)) {
+      setNotification("You’ve already guessed that movie!");
+      setIsCorrect(false);
+      // clear the message after a few seconds
+      setTimeout(() => setNotification(""), 3000);
+      return; 
+  }
+
     if (model.currentGuess) {
       console.log("Submitting movie id:", model.currentGuess);
       getMovieDetails(model.currentGuess)

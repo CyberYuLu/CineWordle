@@ -15,7 +15,7 @@ export const model = {
 
    
     currentUser : null, 
-    leaderBoard :  [],  // The values can be collected from firebase intially and when something changes.
+    leaderBoard :  null,  // The values can be collected from firebase intially and when something changes.
     /**
      * Keep the guesses locally, but pick them up from the persistence. 
      * 
@@ -75,17 +75,18 @@ export const model = {
           timestamp: Date.now(),
         };
 
+
+
         console.log("Entry to leaderboard", entry)
 
         // Can get challengeID from the date.
         let challengeID = new Date().toISOString().split("T")[0]
-        updateLeaderboard(challengeID, entry).catch(console.error);
-
+     this.leaderBoard[this.currentUser.uid] = entry;
+    updateLeaderboard(challengeID, this.leaderBoard[this.currentUser.uid])
+      .catch(console.error);
       // also update local leaderboard if you’re showing it immediately
      //   this.addEntryToLeaderboard();
         
-        // Update the local leaderboard
-        this.leaderBoard.push(entry)
       }
       this.win = win;
       
@@ -224,29 +225,6 @@ export const model = {
     getYear(dateString) {
         return dateString ? `(${new Date(dateString).getFullYear()})` : '';
     },
-
-    resetModel() {
-        this.currentUser = null;
-        this.leaderBoard = [];
-        this.guesses = [];
-        this.popular = true;
-        this.authInitialized = true;
-        this.currentGuessID = null;
-        this.searchStr = null;
-        this.searchResultsPromiseState = {
-          data: { results: [] },
-          error: null,
-          promise: null,
-        };
-        this.currentMoviePromiseState = {};
-        this.win = false;
-        this.loose = false;
-        this.displayLoosingScreen = false;
-        this.displayWinningScreen = false;
-        this.guessForFirstHint = 3; 
-        this.guessForSecondHint = 5;
-        this.guessForLoose = 7;
-      }
 
 
 

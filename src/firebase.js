@@ -157,13 +157,11 @@ export function fetchChallengeData(reactiveModel){
           })
           .then(function(movie){
             // Create and set the challengeDoc for the day. 
-            return setDoc(challengeDocRef, {
-                challengeID: date,
-                correctMovie: movie,
-                // The leaderboard for todays challenge, not the 
-                leaderboard: {}
-
-            }, {merge: true});
+          setDoc(challengeDocRef, {
+            challengeID: date,
+            correctMovie: movie,
+            leaderboard: {}
+          });
           });
         }
 
@@ -174,22 +172,20 @@ export function fetchChallengeData(reactiveModel){
         const data = docSnap.data() || {};
         reactiveModel.correctMovie = data.correctMovie;
         reactiveModel.challengeID  = data.challengeID;
-        reactiveModel.leaderboard  = data.leaderboard || {};
+        reactiveModel.leaderBoard  = data.leaderboard || {};
       }
 }
 
 
-export function updateLeaderboard(challengeID, leaderboardEntry) {
-    const challengeDocRef = doc(db, CHALLENGECOLLECTSION, challengeID);
-    return updateDoc(challengeDocRef, {
-        leaderboard: arrayUnion(leaderboardEntry)
-    })
-    .then(() => {
-        console.log("Leaderboard updated successfully.");
-    })
-    .catch((error) => {
-        console.error("Error updating leaderboard:", error);
-    });
+/**
+ * Atomically upsert this user's entry under leaderboard.<uid>
+ */
+export function updateLeaderboard(challengeID, entry) {
+  const challengeDocRef = doc(db, CHALLENGECOLLECTSION, challengeID);
+  // This uses Firestore’s “dot‐notation” to write a nested map field:
+  return updateDoc(challengeDocRef, {
+    [`leaderboard.${entry.uid}`]: entry
+  });
 }
 
 

@@ -31,6 +31,3 @@ createRoot(document.getElementById('root')).render(rootJSX);
 
 window.myModel= reactiveModel;
 
-
-// Need to connect to the persistence. Can maybe do it during the authstateChange.
-// Most/all of the code for reacting to state changes is in the the 
