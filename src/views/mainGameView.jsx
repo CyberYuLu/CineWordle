@@ -8,7 +8,7 @@ export const MainGameView = observer((props) => {
 
   const targetTitle = props.model.correctMovie?.title || "No Data";
   const targetYear = props.model.correctMovie?.release_date.split("-")[0] || 0;
-  const targetBudget = props.model.correctMovie?.budget.toLocaleString("fr-FR") || 0;
+  const targetBudget = props.model.correctMovie?.budget || 0;
   const targetCompany = props.model.correctMovie?.production_companies[0]?.name || "No Data";
   const targetCountry = props.model.correctMovie?.production_countries[0]?.name || "No Data";
   const targetDirector = props.model.correctMovie?.directors[0] || "No Data";
@@ -23,8 +23,9 @@ export const MainGameView = observer((props) => {
 
     const title = guess?.title || "No Data";
     const releaseYear = guess?.release_date.split("-")[0] || 0;
-    const budget = guess?.budget.toLocaleString("fr-FR") || 0;
+    const budget = guess?.budget || 0;
     const director = guess?.directors[0] || "No Data";
+
     const company = guess?.production_companies[0]?.name || "No Data";
     const country = guess?.production_countries[0]?.name || "No Data";
 
@@ -108,7 +109,9 @@ export const MainGameView = observer((props) => {
 
 
 
-      <h1 style={{ textAlign: "center", padding: "20px" }}>Guesses</h1>
+      <h1 style={{ textAlign: "center", padding: "20px" }}>
+        Guesses {props.model.guesses.length > 0 ? `: ${props.model.guesses.length}/${props.model.guessForLoose}` : ""}
+      </h1>
       <table className="guesses-container">
         <tbody>
           <tr className="guess-header">

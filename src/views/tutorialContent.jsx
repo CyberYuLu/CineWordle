@@ -3,7 +3,7 @@ import React from "react";
 export function TutorialContent() {
   return (
     <div className="text-start">
-      <p>Guess the movie in 5 tries.</p>
+      <p>Guess the movie in 7 tries.</p>
       <ul>
         <li>Each guess must be a real movie title.</li>
         <li>
