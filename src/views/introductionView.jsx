@@ -5,7 +5,7 @@ import "/src/styles/general.css";
 
 
 
-export function IntroductionView({ onSolo, onDaily, user }) {
+export function IntroductionView({ onDaily, user }) {
   return (
     <div className="intro-container">
       <section className="intro-hero">
@@ -28,7 +28,6 @@ export function IntroductionView({ onSolo, onDaily, user }) {
             
               <button
             onClick={onDaily}
-            disabled={!user}
             title={!user ? "Log in to play today’s challenge" : undefined}
             style={{ width: 200, height: 80, fontSize: 20, marginLeft: 20 }}
           >

@@ -37,9 +37,6 @@ const Main = observer(
                 {props.model && props.model.displayWinningScreen && <WinningView onButtonClick={disableWinningScreanACB} model={props.model}/>}
                 {props.model && props.model.displayLoosingScreen && <LosingView onButtonClick={disableLosingScreanACB} model={props.model}/>}
 
-                <button onClick={toggleWinACB}>Toggle Win</button>
-                <button onClick={toggleloseACB}>Toggle lose</button>
-
             </div>
         );
     }

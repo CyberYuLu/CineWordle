@@ -16,17 +16,17 @@ export function TutorialContent() {
       <p><strong>Color Patch Meaning:</strong></p>
       <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
         <span style={{ backgroundColor: "green", color: "white", padding: "6px 10px", borderRadius: "4px" }}>
-          ✅ Correct name
+          ✅ Correct attribute
         </span>
       </div>
       <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
         <span style={{ backgroundColor: "yellow", color: "black", padding: "6px 10px", borderRadius: "4px" }}>
-          🟡 Correct year, but not correct movie
+          🟡 Partially correct attribute
         </span>
       </div>
       <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
         <span style={{ backgroundColor: "red", color: "white", padding: "6px 10px", borderRadius: "4px" }}>
-          ⬛ Not in the target movie
+          ⬛ Incorrect attribute
         </span>
       </div>
 

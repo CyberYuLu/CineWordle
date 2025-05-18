@@ -18,7 +18,9 @@ export const WinningView = observer((props) => {
 
             <div className="movie-details">
                 <h2>{movie.name}</h2>
-                <p className="movie-description">{movie.description}</p>
+                <p className="movie-description">  {movie.description.length > 300
+                    ? movie.description.slice(0, 300) + "..."
+                    : movie.description}</p>
                 <img src={`https://image.tmdb.org/t/p/w300${movie.image}`} alt={movie.name} />
             </div>
             <button onClick={props.onButtonClick}>Exit !</button>
