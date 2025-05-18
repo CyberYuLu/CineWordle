@@ -24,44 +24,63 @@ const ProfilePresenter = observer(function ProfilePresenter({ model }) {
       let totalWinsCount = 0;
       let totalLossesCount = 0;
 
+
       snapshot.forEach((doc) => {
         const data = doc.data();
 
-        // 只统计有猜测的那天
+        // calculate the total guesses
         if (Array.isArray(data.guess) && data.guess.length > 0) {
           totalGuessesCount += data.guess.length;
           totalRounds += 1;
+        }
 
-          if (data.win === true) totalWinsCount += 1;
-          if (data.loose === true) totalLossesCount += 1;
+        // calculate the total wins & total losses    
+        if (data.win === true) {
+          totalWinsCount += 1;
+        }
+        if (data.loose === true) {
+          totalLossesCount += 1;
         }
       });
 
+      // Calculate average guesses
       const avg = totalRounds > 0 ? (totalGuessesCount / totalRounds).toFixed(0) : 0;
-      const winRateCalc = totalRounds > 0 ? ((totalWinsCount / totalRounds) * 100).toFixed(2) : 0;
-      const guessesPerWinCalc = totalWinsCount > 0 ? (totalGuessesCount / totalWinsCount).toFixed(0) : 0;
+
+      // Calculate win rate
+      const winRate = totalRounds > 0 ? ((totalWinsCount / totalRounds) * 100).toFixed(2) : 0;
+
+
+      // Calculate guesses per win
+      const guessesPerWin = totalWinsCount > 0 ? (totalGuessesCount / totalWinsCount).toFixed(0) : 0;
+
+
+      console.log("👀 winRate:", winRate);
+      console.log("✅ totalWinsCount:", totalWinsCount);
+      console.log("✅ totalRounds:", totalRounds);
 
       setTotalGuesses(totalGuessesCount);
-      setAverageGuesses(avg);
       setTotalWins(totalWinsCount);
       setTotalLosses(totalLossesCount);
-      setWinRate(winRateCalc);
-      setGuessesPerWin(guessesPerWinCalc);
+      setAverageGuesses(avg);
+      setWinRate(winRate);
+      setGuessesPerWin(guessesPerWin);
+
     }
 
     fetchGuessesData();
   }, [model.currentUser]);
+
 
   return (
     <ProfileView
       user={model.currentUser}
       totalGuesses={totalGuesses}
       averageGuesses={averageGuesses}
+      streak={model.streak}
       totalWins={totalWins}
       totalLosses={totalLosses}
       winRate={winRate}
       guessesPerWin={guessesPerWin}
-      streak={model.streak}
     />
   );
 });
