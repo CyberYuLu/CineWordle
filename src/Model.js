@@ -255,7 +255,7 @@ function ifGuessesAreResetACB() {
     }
 }
 function ifTooMuchGuessACB(){
-    if (model && model.guesses && model.guesses.length >= model.guessForLoose) 
+    if (model && model.guesses && model.guesses.length >= model.guessForLoose  && !isCorrectGuessACB()) 
       {
         
         return true;}
