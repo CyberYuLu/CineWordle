@@ -8,7 +8,6 @@ import { createRegisterPresenter } from "./registerPresenter.jsx";
 import { TutorialPresenter } from "./tutorialPresenter.jsx";
 import { ProfilePresenter } from "./profilePresenter.jsx";
 import { LeaderboardPresenter } from "./leaderboardPresenter.jsx";
-import {BlurredGame} from "./blurredGamePresenter.jsx"
 import { SuspenseView } from "../views/suspenseView.jsx";
 
 function LoginWrapper({ model }) {
@@ -32,7 +31,6 @@ function makeRouter(model) {
         { path: "/profile", element: <ProfilePresenter model={model} /> },
         { path: "/leaderboard", element: <LeaderboardPresenter model={model} /> },
         {/** If we want to to include the other game */}, 
-        {path: "/blurredGame", element: <BlurredGame model={model} maxAttempts={10} mode={'blur-level'}/> }
   ]);
 }
 
