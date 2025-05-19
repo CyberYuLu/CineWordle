@@ -254,12 +254,14 @@ function ifGuessesAreResetACB() {
         return true;
     }
 }
-function ifTooMuchGuessACB(){
-    if (model && model.guesses && model.guesses.length >= model.guessForLoose  && !isCorrectGuessACB()) 
-      {
-        
-        return true;}
-};
+function ifTooMuchGuessACB() {
+    if (!model || !model.guesses) return false;
+
+    const hasTooManyGuesses = model.guesses.length >= model.guessForLoose;
+    const lastGuessIncorrect = !isCorrectGuessACB();
+
+    return hasTooManyGuesses && lastGuessIncorrect;
+}
 
 function triggerLooseACB(){
     console.log("Too much guess, triggering loose")
