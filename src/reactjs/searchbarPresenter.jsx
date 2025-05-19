@@ -1,114 +1,145 @@
-// SearchBar.jsx
+// src/reactjs/searchbarPresenter.jsx
 import { observer } from "mobx-react-lite";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { SearchBarView } from "../views/searchbarView";
 import { getMovieDetails } from "../fetchData";
 import { recordGuess } from "../firebase";
-function debounce(callback, delay) {
-  let timerId;
-  function debounced(...args) {
-    clearTimeout(timerId);
-    timerId = setTimeout(() => {
-      callback(...args);
-    }, delay);
-  }
-  return debounced;
+
+// basic debounce
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
 }
 
 const SearchBar = observer(function SearchBar(props) {
   const { model, setNotification, setIsCorrect } = props;
-  // When this function is called, it will execute the search.
-  function performSearch(query) {
-    
-    props.model.doSearch(query );
-   
-  }
-  
-  // Create a debounced version of performSearch
-  const debouncedSearch = debounce(performSearch, 1000);
-  
-  // Callback for when the query changes.
-  function handleQueryChange(event) {
-    const newQuery = event.target.value;
-    console.log(newQuery)
-    props.model.setSearchQuery(newQuery);
-    if (newQuery.length >= 2) {
-      debouncedSearch(newQuery);
 
+  // component state:
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [showOptions, setShowOptions]     = useState(false);
+  const [isSubmitting, setIsSubmitting]   = useState(false);
+
+  const containerRef = useRef(null);
+  const inputRef     = useRef(null);
+
+  const debouncedSearch = useMemo(
+    () => debounce((q) => model.doSearch(q), 1000),
+    [model]
+  );
+
+  function handleQueryChange(e) {
+    const q = e.target.value;
+    model.setSearchQuery(q);
+    setSelectedIndex(-1);
+
+    if (q.length >= 2) {
+      debouncedSearch(q);
+      setShowOptions(true);
+    } else {
+      setShowOptions(false);
     }
   }
-  
-  // When a movie suggestion is selected, update the search input and set current guess.
-  function handleSuggestionSelect(movie) {
-    // Update the search bar with the movie title.
-    props.model.setSearchQuery(movie.title);
-    // Save the current guess (for example, storing the movie id).
-    props.model.setCurrentGuess(movie.id);
+
+  function handleKeyDown(e) {
+    const list = model.searchResultsPromiseState.data?.results || [];
+    setShowOptions(true);
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedIndex((i) => Math.min(i + 1, list.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex((i) => Math.max(i - 1, 0));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (isSubmitting) return;
+      if (selectedIndex >= 0 && list[selectedIndex]) {
+        selectSuggestion(list[selectedIndex]);
+      } else {
+        submitGuess();
+      }
+    }
   }
-  
-  /**
-   * When the user submits a guess will the persistence for the user be updated with the guess.
-   * Might need to adjust the fetch to aviod race conditions. 
-   */
 
-  function clickButtonACB() {
+  function selectSuggestion(movie) {
+    model.setSearchQuery(movie.title);
+    model.setCurrentGuess(movie.id);
+    setSelectedIndex(-1);
+    setShowOptions(false);
+    inputRef.current?.focus();
+  }
 
-    if (model.guesses.some(g => g.id === model.currentGuess)) {
+  function submitGuess() {
+    if (isSubmitting) return;
+
+    if (model.guesses.some((g) => g.id === model.currentGuess)) {
       setNotification("You’ve already guessed that movie!");
       setIsCorrect(false);
-      // clear the message after a few seconds
-      setTimeout(() => setNotification(""), 3000);
-      return; 
-  }
-
-    if (model.currentGuess) {
-      console.log("Submitting movie id:", model.currentGuess);
-      getMovieDetails(model.currentGuess)
-        .then(movieDetails => {
-          console.log("Got details:", movieDetails);
-          
-          recordGuess(model.currentUser.uid, movieDetails);
-          model.addGuessForUser(movieDetails); 
-  
-          const isCorrect = movieDetails.title === model.correctMovie.title;
-          setIsCorrect(isCorrect);
-          setNotification(isCorrect ? "Correct guess!" : `"${movieDetails.title}" has been added!`);
-  
-          setTimeout(() => setNotification(""), 3000);
-
-          // Change to remove the text.
-          model.setSearchQuery("");
-          model.setCurrentGuess(null);
-        })
-        .catch(err => {
-          console.error(err);
-          setNotification("Failed to fetch movie details.");
-          setIsCorrect(false);
-        });
-    } else {
+      return setTimeout(() => setNotification(""), 3000);
+    }
+    if (!model.currentGuess) {
       setNotification("No movie selected.");
       setIsCorrect(false);
+      return;
     }
+
+    setIsSubmitting(true);
+    getMovieDetails(model.currentGuess)
+      .then((details) => {
+        recordGuess(model.currentUser.uid, details);
+        model.addGuessForUser(details);
+
+        const correct = details.title === model.correctMovie.title;
+        setIsCorrect(correct);
+        setNotification(correct ? "Correct guess!" : `"${details.title}" added!"`);
+        setTimeout(() => setNotification(""), 3000);
+
+        model.setSearchQuery("");
+        model.setCurrentGuess(null);
+      })
+      .catch(() => {
+        setNotification("Failed to fetch movie details.");
+        setIsCorrect(false);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   }
 
-  // Suspenseview.
-  const isLoading = !props.model.searchResultsPromiseState.data;
-  let suggestions = props.model.searchResultsPromiseState.data?.results || [];
-  let query = props.model.searchStr|| "";
-  
+  // Hide dropdown on outside click (but keep text)
+  useEffect(() => {
+    function onClick(e) {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setShowOptions(false);
+      }
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
 
-  /**
-   * Possibly not the best solution. Need to adjust so so drop down results has their own presenter as in the lab.
-   * 
-   */
+  const isLoading   = !model.searchResultsPromiseState.data;
+  const suggestions = model.searchResultsPromiseState.data?.results || [];
+  const query       = model.searchStr || "";
+
   return (
-    <SearchBarView
-      query={query}
-      isLoading={isLoading}
-      suggestions={suggestions}
-      onQueryChange={handleQueryChange}
-      onSuggestionSelect={handleSuggestionSelect}
-      onSubmitButtonClick={clickButtonACB}
-    />
+    <div ref={containerRef}>
+      <SearchBarView
+        inputRef={inputRef}
+        showOptions={showOptions}
+        isSubmitting={isSubmitting}
+        query={query}
+        isLoading={isLoading}
+        suggestions={suggestions}
+        selectedIndex={selectedIndex}
+        onQueryChange={handleQueryChange}
+        onKeyDown={handleKeyDown}
+        onSuggestionSelect={selectSuggestion}
+        onSubmitButtonClick={submitGuess}
+      />
+    </div>
   );
 });
 
