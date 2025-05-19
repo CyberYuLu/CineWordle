@@ -15,4 +15,4 @@
 
 ### 3rd Party Components
 
-We did not use any 3rd party components in this project.
+We use b、Bootstrap as the 3rd party components in some pages of this project, sunch as "profile" and "How to play"
