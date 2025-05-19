@@ -9,7 +9,6 @@ const Sidebar = observer(function SidebarRender(props) {
         try {
             await signOut(auth);
             //props.model.currentUser = null;
-            props.model.resetModel();
 
             
         } catch (error) {
