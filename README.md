@@ -15,4 +15,4 @@
 
 ### 3rd Party Components
 
-We use Bootstrap as the 3rd party components in some pages of this project, sunch as "profile" and "How to play"
+We use Bootstrap as the 3rd party components in some pages of this project, such as "profile" and "How to play"
