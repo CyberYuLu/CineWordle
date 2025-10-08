@@ -247,15 +247,21 @@ makeAutoObservable(model);
 // handle winning and loosing with side effects.
 reaction(ifTooMuchGuessACB, triggerLooseACB);
 reaction(isCorrectGuessACB, triggerWinACB);
-reaction(ifFirstHintACB, triggerFirstHintACB);
-reaction(ifSecondHintACB, triggerSecondHintACB);
 
-function ifTooMuchGuessACB(){
-    if (model && model.guesses && model.guesses.length >= model.guessForLoose) 
-      {
-        
-        return true;}
-};
+
+function ifGuessesAreResetACB() {
+    if (model && model.guesses && model.guesses.length === 0) {
+        return true;
+    }
+}
+function ifTooMuchGuessACB() {
+    if (!model || !model.guesses) return false;
+
+    const hasTooManyGuesses = model.guesses.length >= model.guessForLoose;
+    const lastGuessIncorrect = !isCorrectGuessACB();
+
+    return hasTooManyGuesses && lastGuessIncorrect;
+}
 
 function triggerLooseACB(){
     console.log("Too much guess, triggering loose")
@@ -279,27 +285,7 @@ function triggerWinACB() {
 
 }
 
-function ifFirstHintACB(){
-    if (model && model.guesses && model.guesses.length >= model.guessForFirstHint) 
-        return true;
-}
 
-function triggerFirstHintACB()
-{
-    model.setFirstHint(true);
-    console.log("First hint triggered")
-}
-
-function ifSecondHintACB(){
-    if (model &&  model.guesses && model.guesses.length >= model.guessForSecondHint) 
-        return true;
-}
-
-function triggerSecondHintACB()
-{
-    model.setSecondHint(true);
-    console.log("Second hint triggered")
-}
 
 // ------------------ END OF WINNING MANAGEMENT + HINT MANAGEMENT -------------------------
 

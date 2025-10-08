@@ -13,9 +13,10 @@ const HintsPresenter = observer(function HintsPresenter(props) {
     return (
         <div>
             <div className="hints-container">
-                {!props.model.firstHint && <NoDisplayHintView />}
-                {props.model.firstHint && !props.model.secondHint && <HintView hint={<span><strong>Hint 1</strong>: Main Character - <strong>{hints.mainCharacter}</strong></span>} />}
-                {props.model.secondHint && (
+                {props.model.guesses.length < props.model.guessForFirstHint && <NoDisplayHintView />}
+                {props.model.guesses.length >= props.model.guessForFirstHint && props.model.guesses.length < props.model.guessForSecondHint 
+                 && <HintView hint={<span><strong>Hint 1</strong>: Main Character - <strong>{hints.mainCharacter}</strong></span>} />}
+                {props.model.guesses.length >= props.model.guessForSecondHint && (
                     <div>
                         <HintView hint={<span><strong>Hint 1</strong>: Main Character - {hints.mainCharacter}</span>} />
                         <HintView hint={<span><strong>Hint 2</strong>: {hints.summary}</span>} />

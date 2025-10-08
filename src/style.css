@@ -117,6 +117,10 @@
   font-size: 1rem;
 }
 
+.searchBarOptionItem.active {
+  background-color: #f0f0f0;
+}
+
 .searchBarButton {
   margin-left: 8px;
   padding: 8px 12px;

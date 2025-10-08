@@ -1,71 +1,69 @@
-// SearchBarView.jsx
-import "/src/style.css";
+// src/views/searchbarView.jsx
+import React from "react";
 import { SuspenseView } from "./suspenseView";
-//export function SearchBarView({ query, suggestions, onQueryChange, onSuggestionSelect, onSubmitButtonClick }) {
-  
 
 export function SearchBarView({
+  inputRef,
+  showOptions,
+  isSubmitting,
   query,
-  isLoading, 
+  isLoading,
   suggestions,
+  selectedIndex,
   onQueryChange,
+  onKeyDown,
   onSuggestionSelect,
   onSubmitButtonClick,
 }) {
   return (
     <div className="searchBarContainer">
       <input
+        ref={inputRef}
         type="text"
         placeholder="Enter movie guess"
         value={query}
         onChange={onQueryChange}
+        onKeyDown={onKeyDown}
         className="searchBarInput"
+        disabled={isSubmitting}
       />
       <button
         onClick={onSubmitButtonClick}
         className="searchBarButton"
+        disabled={isSubmitting}
       >
-        Submit
+        {isSubmitting ? "Submitting..." : "Submit"}
       </button>
 
-      {query.length > 2 &&  (
+      {showOptions && query.length >= 2 && (
         <div className="searchBarOptions">
-           {isLoading ? (
+          {isLoading ? (
             <SuspenseView />
           ) : (
-          
-          suggestions.map((movie) => {
-            // Extract just the year from release_date
-            const year = movie.release_date
-              ? movie.release_date.substring(0, 4)
-              : "";
-
-            return (
-              <div
-                key={movie.id}
-                onClick={() => onSuggestionSelect(movie)}
-                className="searchBarOptionItem"
-              >
-                <div className="searchBarOptionText">
-                  <span className="searchBarTitle">{movie.title}</span>
-                  {year && (
-                    <span className="searchBarReleaseYear">
-                      ({year})
-                    </span>
+            suggestions.map((movie, idx) => {
+              const year = movie.release_date?.slice(0, 4) || "";
+              const isActive = idx === selectedIndex;
+              return (
+                <div
+                  key={movie.id}
+                  onClick={() => onSuggestionSelect(movie)}
+                  className={`searchBarOptionItem ${isActive ? "active" : ""}`}
+                >
+                  <div className="searchBarOptionText">
+                    <span className="searchBarTitle">{movie.title}</span>
+                    {year && <span className="searchBarReleaseYear">({year})</span>}
+                  </div>
+                  {movie.poster_path && (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
+                      alt={`${movie.title} poster`}
+                      className="searchBarPosterThumb"
+                    />
                   )}
                 </div>
-
-                {movie.poster_path && (
-                  <img
-                    src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
-                    alt={`${movie.title} poster`}
-                    className="searchBarPosterThumb"
-                  />
-                )}
-              </div>
-            );
-          })
-        )}
+              );
+            })
+          )}
         </div>
       )}
     </div>

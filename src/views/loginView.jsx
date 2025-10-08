@@ -1,5 +1,4 @@
 // src/views/LoginView.jsx
-import React from "react";
 import '../styles/auth.css';
 
 export function LoginView({
